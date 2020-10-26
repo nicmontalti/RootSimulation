@@ -25,10 +25,12 @@ class Particle
   }
 
   double GetMass() const { return fParticleTypes[fIParticle]->GetMass(); }
-  double Energy() const;
+  double GetEnergy() const;
   double InvMass(Particle& particle2) const;
 
   void Print() const;
+
+  int Decay2body(Particle& dau1, Particle& dau2) const;
 
   static void AddParticleType(std::string name,
                               double mass,
@@ -47,6 +49,8 @@ class Particle
   static int fNParticleType;
   static ParticleType* fParticleTypes[];
   static int FindParticle(std::string name);
+
+  void Boost(double bx, double by, double bz);
 };
 
 #endif  // PARTICLE_HPP

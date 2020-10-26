@@ -13,6 +13,7 @@ class ParticleType
   double GetMass() const { return fMass; }
   double GetCharge() const { return fCharge; }
   virtual void Print() const;
+  virtual double GetWidth() const;
 
  private:
   const std::string fName;
