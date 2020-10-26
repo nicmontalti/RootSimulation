@@ -42,8 +42,8 @@ double Particle::InvMass(Particle& particle2) const
       // clang-format off
       (E1 + E2) * (E1 + E2) -
       ((fPx + Px2) * (fPx + Px2) + 
-      (fPx + Px2) * (fPx + Px2) +
-      (fPx + Px2) * (fPx + Px2))
+      (fPy + Py2) * (fPy + Py2) +
+      (fPz + Pz2) * (fPz + Pz2))
       // clang-format on
   );
 }
