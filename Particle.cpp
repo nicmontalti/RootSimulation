@@ -11,7 +11,7 @@ Particle::Particle(std::string name, double Px, double Py, double Pz)
     : fPx{Px}, fPy{Py}, fPz{Pz}
 {
   fIParticle = FindParticle(name);
-  if (fIParticle == -1) {
+  if (fIParticle == -1 && name != "") {
     std::cout << "Uknown ParticleType passed to Particle constructor" << '\n';
   }
 }

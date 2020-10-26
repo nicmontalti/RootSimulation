@@ -7,7 +7,10 @@
 class Particle
 {
  public:
-  Particle(std::string name, double Px = 0., double Py = 0., double Pz = 0.);
+  Particle(std::string name = {},
+           double Px = 0.,
+           double Py = 0.,
+           double Pz = 0.);
 
   int GetIParticle() const { return fIParticle; }
   void SetParticleType(int IParticle) { fIParticle = IParticle; }
@@ -24,6 +27,8 @@ class Particle
     fPz = z;
   }
 
+  std::string GetName() const { return fParticleTypes[fIParticle]->GetName(); }
+  double GetCharge() const { return fParticleTypes[fIParticle]->GetCharge(); }
   double GetMass() const { return fParticleTypes[fIParticle]->GetMass(); }
   double GetEnergy() const;
   double InvMass(Particle& particle2) const;
