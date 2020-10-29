@@ -1,5 +1,6 @@
 #include <array>
 #include "Particle.hpp"
+#include "TBenchmark.h"
 #include "TFile.h"
 #include "TH1.h"
 #include "TH2.h"
@@ -7,7 +8,7 @@
 #include "TRandom.h"
 
 int constexpr maxNumParticle = 100;
-int constexpr maxResonanceDecay = 20;
+int constexpr maxNumDecay = 20;
 
 void AddParticleTypes()
 {
@@ -21,9 +22,9 @@ void AddParticleTypes()
 }
 
 int GenerateParticles(
-    std::array<Particle, maxNumParticle + maxResonanceDecay>& particles)
+    std::array<Particle, maxNumParticle + maxNumDecay>& particles)
 {
-  int nResonanceDecay = 0;
+  int nDecay = 0;
 
   for (int i = 0; i != maxNumParticle; ++i) {
     double phi = gRandom->Uniform(2 * TMath::Pi());
@@ -54,30 +55,25 @@ int GenerateParticles(
 
       double y = gRandom->Rndm();
       if (y < 0.5) {
-        particles[maxNumParticle + nResonanceDecay].SetParticleType("pion+");
-        particles[maxNumParticle + nResonanceDecay + 1].SetParticleType(
-            "kaon-");
+        particles[maxNumParticle + nDecay].SetParticleType("pion+");
+        particles[maxNumParticle + nDecay + 1].SetParticleType("kaon-");
       } else {
-        particles[maxNumParticle + nResonanceDecay].SetParticleType("pion-");
-        particles[maxNumParticle + nResonanceDecay + 1].SetParticleType(
-            "kaon+");
+        particles[maxNumParticle + nDecay].SetParticleType("pion-");
+        particles[maxNumParticle + nDecay + 1].SetParticleType("kaon+");
       }
 
-      particles[i].Decay2body(particles[maxNumParticle + nResonanceDecay],
-                              particles[maxNumParticle + nResonanceDecay + 1]);
+      particles[i].Decay2body(particles[maxNumParticle + nDecay],
+                              particles[maxNumParticle + nDecay + 1]);
 
-      nResonanceDecay += 2;
+      nDecay += 2;
     }
   }
-  return nResonanceDecay;
+  return nDecay;
 }
 
-int main()
+TList* FillHistos(int nEvents = 1e5)
 {
   gRandom->SetSeed();
-  int nEvents = 1e5;
-
-  AddParticleTypes();
 
   auto hParticleTypes = new TH1F("hParticleTypes", "Particle types", 7, 0, 7);
   auto hAzimutalAngles = new TH1F(
@@ -129,7 +125,7 @@ int main()
                1.5);
 
   for (int i = 0; i != nEvents; ++i) {
-    std::array<Particle, maxNumParticle + maxResonanceDecay> particles;
+    std::array<Particle, maxNumParticle + maxNumDecay> particles;
     int nResonanceDecay = GenerateParticles(particles);
 
     for (int i = 0; i != nResonanceDecay + maxNumParticle; ++i) {
@@ -183,19 +179,34 @@ int main()
       }
     }
   }
+
+  auto listHistos = new TList{};
+  listHistos->Add(hParticleTypes);
+  listHistos->Add(hAzimutalAngles);
+  listHistos->Add(hPolarAngles);
+  listHistos->Add(hAngles);
+  listHistos->Add(hPulse);
+  listHistos->Add(hTransversePulse);
+  listHistos->Add(hEnergy);
+  listHistos->Add(hInvMass);
+  listHistos->Add(hConcordantInvMass);
+  listHistos->Add(hDiscordantInvMass);
+  listHistos->Add(hConcordantPionKaonInvMass);
+  listHistos->Add(hDiscordantPionKaonInvMass);
+  listHistos->Add(hResonanceCoupleInvMass);
+
+  return listHistos;
+}
+
+int main()
+{
+  AddParticleTypes();
+  auto listHistos = FillHistos(1e5);
+  listHistos->SetOwner();
   auto file = new TFile("Histograms.root", "RECREATE");
-  hParticleTypes->Write();
-  hAzimutalAngles->Write();
-  hPolarAngles->Write();
-  hAngles->Write();
-  hPulse->Write();
-  hTransversePulse->Write();
-  hEnergy->Write();
-  hInvMass->Write();
-  hConcordantInvMass->Write();
-  hDiscordantInvMass->Write();
-  hConcordantPionKaonInvMass->Write();
-  hDiscordantPionKaonInvMass->Write();
-  hResonanceCoupleInvMass->Write();
+  for (auto const histo : *listHistos) {
+    histo->Write();
+  }
   file->Close();
+  delete listHistos;
 }
