@@ -73,7 +73,8 @@ int GenerateParticles(
 
 TList* FillHistos(int nEvents = 1e5)
 {
-  gRandom->SetSeed();
+  TBenchmark bm;
+  TBenchmark b2;
 
   auto hParticleTypes = new TH1F("hParticleTypes", "Particle types", 7, 0, 7);
   auto hAzimutalAngles = new TH1F(
@@ -131,16 +132,14 @@ TList* FillHistos(int nEvents = 1e5)
     for (int i = 0; i != nResonanceDecay + maxNumParticle; ++i) {
       auto& particle = particles[i];
 
-      auto phi = TMath::ATan(particle.GetPy() / particle.GetPx());
-      auto theta =
-          TMath::ATan(TMath::Sqrt(particle.GetPx() * particle.GetPx() +
-                                  particle.GetPy() * particle.GetPy()) /
-                      particle.GetPz());
-      auto P = TMath::Sqrt(particle.GetPx() * particle.GetPx() +
-                           particle.GetPy() * particle.GetPy() +
-                           particle.GetPz() * particle.GetPz());
-      auto transP = TMath::Sqrt(particle.GetPx() * particle.GetPx() +
-                                particle.GetPy() * particle.GetPy());
+      double Px = particle.GetPx();
+      double Py = particle.GetPy();
+      double Pz = particle.GetPz();
+
+      auto phi = TMath::ATan(Py / Px);
+      auto theta = TMath::ATan(TMath::Sqrt(Px * Px + Py * Py) / Pz);
+      auto P = TMath::Sqrt(Px * Px + Py * Py + Pz * Pz);
+      auto transP = TMath::Sqrt(Px * Px + Py * Py);
 
       hParticleTypes->Fill(particle.GetIParticle());
       hPolarAngles->Fill(phi);
@@ -152,22 +151,21 @@ TList* FillHistos(int nEvents = 1e5)
 
       for (int j = i + 1; j != maxNumParticle + nResonanceDecay; ++j) {
         auto& particle2 = particles[j];
+        auto name = particle.GetName();
+        auto name2 = particle2.GetName();
         double invMass = particle.InvMass(particle2);
+
         hInvMass->Fill(invMass);
         if (particle.GetCharge() * particle2.GetCharge() > 0) {
           hConcordantInvMass->Fill(invMass);
-          if ((particle.GetName() == "pion+" &&
-               particle2.GetName() == "kaon+") ||
-              (particle.GetName() == "pion-" &&
-               particle2.GetName() == "kaon-")) {
+          if ((name == "pion+" && name2 == "kaon+") ||
+              (name == "pion-" && name2 == "kaon-")) {
             hConcordantPionKaonInvMass->Fill(invMass);
           }
         } else {
           hDiscordantInvMass->Fill(invMass);
-          if ((particle.GetName() == "pion+" &&
-               particle2.GetName() == "kaon-") ||
-              (particle.GetName() == "pion-" &&
-               particle2.GetName() == "kaon+")) {
+          if ((name == "pion+" && name2 == "kaon-") ||
+              (name == "pion-" && name2 == "kaon+")) {
             hDiscordantPionKaonInvMass->Fill(invMass);
           }
         }
@@ -200,13 +198,20 @@ TList* FillHistos(int nEvents = 1e5)
 
 int main()
 {
+  gRandom->SetSeed();
+
+  TBenchmark b;
   AddParticleTypes();
-  auto listHistos = FillHistos(1e5);
+  b.Start("fill");
+  auto listHistos = FillHistos(1e4);
+  b.Show("fill");
   listHistos->SetOwner();
   auto file = new TFile("Histograms.root", "RECREATE");
+  b.Start("file");
   for (auto const histo : *listHistos) {
     histo->Write();
   }
   file->Close();
+  b.Show("file");
   delete listHistos;
 }
