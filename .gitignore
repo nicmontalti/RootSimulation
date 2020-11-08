@@ -6,3 +6,5 @@
 .vscode/
 *.pcm
 *.root
+*.C
+*.pdf
