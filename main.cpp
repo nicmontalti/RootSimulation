@@ -1,4 +1,3 @@
-#include <array>
 #include "Particle.hpp"
 #include "TBenchmark.h"
 #include "TFile.h"
@@ -6,12 +5,12 @@
 #include "TH2.h"
 #include "TMath.h"
 #include "TRandom.h"
+#include <array>
 
 int constexpr maxNumParticle = 100;
 int constexpr maxNumDecay = 20;
 
-void AddParticleTypes()
-{
+void AddParticleTypes() {
   Particle::AddParticleType("pion+", 0.13957, 1);
   Particle::AddParticleType("pion-", 0.13957, -1);
   Particle::AddParticleType("kaon+", 0.49367, 1);
@@ -22,8 +21,7 @@ void AddParticleTypes()
 }
 
 int GenerateParticles(
-    std::array<Particle, maxNumParticle + maxNumDecay>& particles)
-{
+    std::array<Particle, maxNumParticle + maxNumDecay> &particles) {
   int nDecay = 0;
 
   for (int i = 0; i != maxNumParticle; ++i) {
@@ -71,98 +69,78 @@ int GenerateParticles(
   return nDecay;
 }
 
-TList* FillHistos(int nEvents = 1e5)
-{
-  TBenchmark bm;
-  TBenchmark b2;
-
+TList *FillHistos(int nEvents = 1e5) {
   auto hParticleTypes = new TH1F("hParticleTypes", "Particle types", 7, 0, 7);
   auto hAzimutalAngles = new TH1F(
-      "hAzimutalAngles", "Azimutal angles distribution", 100, 0, TMath::Pi());
-  auto hPolarAngles = new TH1F(
-      "hPolarAngles", "Polar angles distribution", 100, 0, 2 * TMath::Pi());
-  auto hAngles = new TH2F("hAngles",
-                          "Angles distribution",
-                          100,
-                          100,
-                          0,
-                          TMath::Pi(),
-                          0,
-                          2 * TMath::Pi());
-  auto hPulse = new TH1F("hPulse", "Pulse", 100, 0, 5);
+      "hAzimutalAngles", "Azimutal angles distribution", 10, 0, TMath::Pi());
+  auto hPolarAngles = new TH1F("hPolarAngles", "Polar angles distribution", 10,
+                               0, 2 * TMath::Pi());
+  auto hAngles = new TH2F("hAngles", "Angles distribution", 10, 10, 0,
+                          TMath::Pi(), 0, 2 * TMath::Pi());
+  auto hPulse = new TH1F("hPulse", "Pulse", 20, 0, 5);
   auto hTransversePulse =
-      new TH1F("hTransversePulse", "Transverse pulse", 100, 0, 5);
-  auto hEnergy = new TH1F("hEnergy", "Energy", 100, 0, 5);
-  auto hInvMass = new TH1F("hInvMass", "Invariant mass", 100, 0, 5);
-  auto hConcordantInvMass =
-      new TH1F("hConcordantInvMass",
-               "Invariant mass of particles with concordant charge sign",
-               100,
-               0,
-               5);
-  auto hDiscordantInvMass =
-      new TH1F("hDiscordantInvMass",
-               "Invariant mass of particles with discordant charge sign",
-               100,
-               0,
-               5);
+      new TH1F("hTransversePulse", "Transverse pulse", 20, 0, 5);
+  auto hEnergy = new TH1F("hEnergy", "Energy", 200, 0, 5);
+  auto hInvMass = new TH1F("hInvMass", "Invariant mass", 200, 0, 5);
+  auto hConcordantInvMass = new TH1F(
+      "hConcordantInvMass",
+      "Invariant mass of particles with concordant charge sign", 200, 0, 5);
+  auto hDiscordantInvMass = new TH1F(
+      "hDiscordantInvMass",
+      "Invariant mass of particles with discordant charge sign", 200, 0, 5);
   auto hConcordantPionKaonInvMass =
       new TH1F("hConcordantPionKaonInvMass",
                "Invariant mass of kaons and pions with concordant charge sign",
-               100,
-               0,
-               5);
+               200, 0, 5);
   auto hDiscordantPionKaonInvMass =
       new TH1F("hDiscordantPionKaonInvMass",
                "Invariant mass of kaons and pions with discordant charge sign",
-               100,
-               0,
-               5);
-  auto hResonanceCoupleInvMass =
-      new TH1F("hResonanceCoupleInvMass",
-               "Invariant mass of decayed particles couples",
-               100,
-               0.5,
-               1.5);
+               200, 0, 5);
+  auto hResonanceCoupleInvMass = new TH1F(
+      "hResonanceCoupleInvMass", "Invariant mass of decayed particles couples",
+      24, 0.89166 - 0.2, 0.89166 + 0.2);
 
   for (int i = 0; i != nEvents; ++i) {
     std::array<Particle, maxNumParticle + maxNumDecay> particles;
     int nResonanceDecay = GenerateParticles(particles);
 
     for (int i = 0; i != nResonanceDecay + maxNumParticle; ++i) {
-      auto& particle = particles[i];
+      auto &particle = particles[i];
 
-      double Px = particle.GetPx();
-      double Py = particle.GetPy();
-      double Pz = particle.GetPz();
+      if (i < maxNumParticle) {
+        double Px = particle.GetPx();
+        double Py = particle.GetPy();
+        double Pz = particle.GetPz();
 
-      auto phi = TMath::ATan(Py / Px);
-      auto theta = TMath::ATan(TMath::Sqrt(Px * Px + Py * Py) / Pz);
-      auto P = TMath::Sqrt(Px * Px + Py * Py + Pz * Pz);
-      auto transP = TMath::Sqrt(Px * Px + Py * Py);
+        auto phi = TMath::ATan2(Py, Px) + TMath::Pi();
+        auto theta = TMath::ATan2(TMath::Sqrt(Px * Px + Py * Py), Pz);
+        auto P = TMath::Sqrt(Px * Px + Py * Py + Pz * Pz);
+        auto transP = TMath::Sqrt(Px * Px + Py * Py);
 
-      hParticleTypes->Fill(particle.GetIParticle());
-      hPolarAngles->Fill(phi);
-      hAzimutalAngles->Fill(theta);
-      hAngles->Fill(theta, phi);
-      hPulse->Fill(P);
-      hTransversePulse->Fill(transP);
-      hEnergy->Fill(particle.GetEnergy());
+        hParticleTypes->Fill(particle.GetIParticle());
+        hPolarAngles->Fill(phi);
+        hAzimutalAngles->Fill(theta);
+        hAngles->Fill(theta, phi);
+        hPulse->Fill(P);
+        hTransversePulse->Fill(transP);
+        hEnergy->Fill(particle.GetEnergy());
+      }
 
       for (int j = i + 1; j != maxNumParticle + nResonanceDecay; ++j) {
-        auto& particle2 = particles[j];
+        auto &particle2 = particles[j];
         auto name = particle.GetName();
         auto name2 = particle2.GetName();
         double invMass = particle.InvMass(particle2);
 
         hInvMass->Fill(invMass);
+
         if (particle.GetCharge() * particle2.GetCharge() > 0) {
           hConcordantInvMass->Fill(invMass);
           if ((name == "pion+" && name2 == "kaon+") ||
               (name == "pion-" && name2 == "kaon-")) {
             hConcordantPionKaonInvMass->Fill(invMass);
           }
-        } else {
+        } else if (particle.GetCharge() * particle2.GetCharge() < 0) {
           hDiscordantInvMass->Fill(invMass);
           if ((name == "pion+" && name2 == "kaon-") ||
               (name == "pion-" && name2 == "kaon+")) {
@@ -170,15 +148,17 @@ TList* FillHistos(int nEvents = 1e5)
           }
         }
       }
-      for (int j = maxNumParticle; j != maxNumParticle + nResonanceDecay;
-           j += 2) {
-        double invMass = particles[j].InvMass(particles[j + 1]);
-        hResonanceCoupleInvMass->Fill(invMass);
-      }
+    }
+    for (int j = maxNumParticle; j != maxNumParticle + nResonanceDecay;
+         j += 2) {
+      double invMass = particles[j].InvMass(particles[j + 1]);
+      hResonanceCoupleInvMass->Fill(invMass);
     }
   }
 
   auto listHistos = new TList{};
+  listHistos->SetOwner();
+
   listHistos->Add(hParticleTypes);
   listHistos->Add(hAzimutalAngles);
   listHistos->Add(hPolarAngles);
@@ -196,22 +176,17 @@ TList* FillHistos(int nEvents = 1e5)
   return listHistos;
 }
 
-int main()
-{
+int main() {
   gRandom->SetSeed();
-
-  TBenchmark b;
   AddParticleTypes();
-  b.Start("fill");
-  auto listHistos = FillHistos(1e4);
-  b.Show("fill");
-  listHistos->SetOwner();
+
+  auto listHistos = FillHistos(1e5);
+
   auto file = new TFile("Histograms.root", "RECREATE");
-  b.Start("file");
   for (auto const histo : *listHistos) {
     histo->Write();
   }
   file->Close();
-  b.Show("file");
+
   delete listHistos;
 }
