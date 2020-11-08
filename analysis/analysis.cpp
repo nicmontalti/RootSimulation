@@ -3,19 +3,21 @@
 #include "TCanvas.h"
 #include "TF1.h"
 #include "TFile.h"
+#include "TGaxis.h"
 #include "TH1F.h"
 #include "TLegend.h"
 #include "TList.h"
 #include "TROOT.h"
 #include "TStyle.h"
 
-#include "../Particle.hpp"
 #include "myStyle.hpp"
 
 void analysis() {
   setMyStyle();
+  TGaxis::SetMaxDigits(3);
   gROOT->SetStyle("myStyle");
-  auto file = new TFile("../Histograms.root");
+
+  auto fileHistograms = new TFile("../generation/Histograms.root");
   auto cGeneration = new TCanvas("cGeneration", "Particle Generation");
   auto cInvMass = new TCanvas("cInvMass", "Invariant mass");
   cInvMass->Divide(2, 2);
@@ -24,7 +26,7 @@ void analysis() {
   {
     cGeneration->cd(1);
 
-    auto hParticleTypes = (TH1F *)file->Get("hParticleTypes");
+    auto hParticleTypes = (TH1F *)fileHistograms->Get("hParticleTypes");
     int entries = hParticleTypes->GetEntries();
     std::cout << "PARTICLE TYPES";
     for (int i = 1; i != 8; ++i) {
@@ -73,7 +75,7 @@ void analysis() {
   {
     cGeneration->cd(2);
 
-    auto hPulse = (TH1F *)file->Get("hPulse");
+    auto hPulse = (TH1F *)fileHistograms->Get("hPulse");
     hPulse->Fit("expo", "Q");
     auto fitFunc = hPulse->GetFunction("expo");
 
@@ -91,7 +93,7 @@ void analysis() {
     hPulse->SetFillColor(42);
     hPulse->SetLineColor(kBlack);
     fitFunc->SetLineColor(kBlack);
-    fitFunc->SetLineWidth(3);
+    fitFunc->SetLineWidth(2);
 
     hPulse->Draw();
   }
@@ -99,8 +101,8 @@ void analysis() {
   {
     cGeneration->cd(3);
 
-    auto hAzimutalAngles = (TH1F *)file->Get("hAzimutalAngles");
-    auto hPolarAngles = (TH1F *)file->Get("hPolarAngles");
+    auto hAzimutalAngles = (TH1F *)fileHistograms->Get("hAzimutalAngles");
+    auto hPolarAngles = (TH1F *)fileHistograms->Get("hPolarAngles");
 
     auto listAngles = new TList();
     listAngles->Add(hAzimutalAngles);
@@ -136,13 +138,14 @@ void analysis() {
   }
 
   {
-    auto hConcordantInvMass = (TH1F *)file->Get("hConcordantInvMass");
-    auto hDiscordantInvMass = (TH1F *)file->Get("hDiscordantInvMass");
+    auto hConcordantInvMass = (TH1F *)fileHistograms->Get("hConcordantInvMass");
+    auto hDiscordantInvMass = (TH1F *)fileHistograms->Get("hDiscordantInvMass");
     auto hConcordantPionKaonInvMass =
-        (TH1F *)file->Get("hConcordantPionKaonInvMass");
+        (TH1F *)fileHistograms->Get("hConcordantPionKaonInvMass");
     auto hDiscordantPionKaonInvMass =
-        (TH1F *)file->Get("hDiscordantPionKaonInvMass");
-    auto hResonanceCoupleInvMass = (TH1F *)file->Get("hResonanceCoupleInvMass");
+        (TH1F *)fileHistograms->Get("hDiscordantPionKaonInvMass");
+    auto hResonanceCoupleInvMass =
+        (TH1F *)fileHistograms->Get("hResonanceCoupleInvMass");
 
     auto hDifferencePionKaonInvMass = new TH1F(*hDiscordantPionKaonInvMass);
     hDifferencePionKaonInvMass->Add(hDiscordantPionKaonInvMass,
@@ -159,6 +162,8 @@ void analysis() {
     listInvMass->Add(hDifferenceInvMass);
     listInvMass->Add(hResonanceCoupleInvMass);
 
+    int colors[3] = {45, 31, 38};
+
     for (int i = 0; i != 3; ++i) {
       cInvMass->cd(i + 1);
       auto h = (TH1F *)listInvMass->At(i);
@@ -168,10 +173,10 @@ void analysis() {
 
       h->SetXTitle("Invariant mass (GeV/c^2)");
       h->SetYTitle("Occurences");
-      h->SetFillColor(42);
+      h->SetFillColorAlpha(colors[i], 0.5);
       h->SetLineColor(kBlack);
       func->SetLineColor(kBlack);
-      func->SetLineWidth(3);
+      func->SetLineWidth(2);
 
       h->Draw();
     }

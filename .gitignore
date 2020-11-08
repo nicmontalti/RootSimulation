@@ -2,9 +2,11 @@
 *.so
 *.d
 *.out
-.clang-format
-.vscode/
 *.pcm
 *.root
 *.C
 *.pdf
+.clang-format
+
+build/
+.vscode/

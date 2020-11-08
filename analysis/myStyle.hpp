@@ -220,6 +220,4 @@ void setMyStyle() {
   tmpStyle->SetTextColor(1);
   tmpStyle->SetTextFont(42);
   tmpStyle->SetTextSize(0.05);
-
-  TGaxis::SetMaxDigits(3);
 }
