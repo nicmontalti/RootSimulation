@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(particle_generation CXX)
+project(Root_simulation CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -12,4 +12,6 @@ include(${ROOT_USE_FILE})
 
 add_compile_options(-Wall -Wextra)
 
-add_subdirectory(src)
+add_subdirectory(generation/src)
+add_subdirectory(analysis)
+add_subdirectory(tex)
