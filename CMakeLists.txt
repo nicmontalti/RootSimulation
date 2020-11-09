@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(ROOT COMPONENTS Hist MathCore REQUIRED)
+find_package(ROOT)
 
 include(${ROOT_USE_FILE})
 
