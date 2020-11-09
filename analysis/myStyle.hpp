@@ -9,12 +9,13 @@
 
 #endif
 
-void setMyStyle() {
+void setMyStyle()
+{
   // Add the saved style to the current ROOT session.
 
   delete gROOT->GetStyle("myStyle");
 
-  TStyle *tmpStyle = new TStyle("myStyle", "My Style");
+  TStyle* tmpStyle = new TStyle("myStyle", "My Style");
   tmpStyle->SetNdivisions(510, "x");
   tmpStyle->SetNdivisions(510, "y");
   tmpStyle->SetNdivisions(510, "z");
@@ -203,7 +204,7 @@ void setMyStyle() {
   tmpStyle->SetPaintTextFormat("g");
   tmpStyle->SetLineScalePS(3);
   tmpStyle->SetJoinLinePS(0);
-  tmpStyle->SetCapLinePS(0);
+  // tmpStyle->SetCapLinePS(0);
   tmpStyle->SetColorModelPS(0);
   tmpStyle->SetTimeOffset(788918400);
 
