@@ -1,5 +1,4 @@
 include_directories(${ROOT_INCLUDE_DIRS})
-include_directories(../include)
 
 add_library(Particle ParticleType.cpp ResonanceType.cpp Particle.cpp)
 
