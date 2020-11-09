@@ -12,6 +12,6 @@ include(${ROOT_USE_FILE})
 
 add_compile_options(-Wall -Wextra)
 
-add_subdirectory(generation/src)
+add_subdirectory(generation)
 add_subdirectory(analysis)
 add_subdirectory(tex)
