@@ -12,13 +12,13 @@
 
 #include "myStyle.hpp"
 
-void analysis(std::string filePath)
+void analysis(char* filePath)
 {
   setMyStyle();
   TGaxis::SetMaxDigits(3);
   gROOT->SetStyle("myStyle");
 
-  auto fileHistograms = new TFile(filePath.c_str());
+  auto fileHistograms = new TFile(filePath);
   auto cGeneration = new TCanvas("cGeneration", "Particle Generation");
   auto cInvMass = new TCanvas("cInvMass", "Invariant mass");
   cInvMass->Divide(2, 2);
