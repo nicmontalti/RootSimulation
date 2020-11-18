@@ -1,38 +1,34 @@
 #include "Particle.hpp"
-#include <cmath>    // for M_PI
-#include <cstdlib>  //for RAND_MAX
+#include <cmath>   // for M_PI
+#include <cstdlib> //for RAND_MAX
 #include <iostream>
 
 int Particle::fNParticleType = 0;
 
-ParticleType* Particle::fParticleTypes[fMaxNumParticleType] = {};
+ParticleType *Particle::fParticleTypes[fMaxNumParticleType] = {};
 
 Particle::Particle(std::string name, double Px, double Py, double Pz)
-    : fPx{Px}, fPy{Py}, fPz{Pz}
-{
+    : fPx{Px}, fPy{Py}, fPz{Pz} {
   fIParticle = FindParticle(name);
   if (fIParticle == -1 && name != "") {
     std::cout << "Uknown ParticleType passed to Particle constructor" << '\n';
   }
 }
 
-void Particle::SetParticleType(std::string name)
-{
+void Particle::SetParticleType(std::string name) {
   fIParticle = FindParticle(name);
   if (fIParticle == -1) {
     std::cout << "Uknown ParticleType passed to SetParticleType" << '\n';
   }
 }
 
-double Particle::GetEnergy() const
-{
-  ParticleType* particalType = fParticleTypes[fIParticle];
+double Particle::GetEnergy() const {
+  ParticleType *particalType = fParticleTypes[fIParticle];
   double mass = particalType->GetMass();
   return std::sqrt(mass * mass + fPx * fPx + fPy * fPy + fPz * fPz);
 }
 
-double Particle::InvMass(Particle& particle2) const
-{
+double Particle::InvMass(Particle const &particle2) const {
   double E1 = GetEnergy();
   double E2 = particle2.GetEnergy();
   double Px2 = particle2.GetPx();
@@ -49,18 +45,14 @@ double Particle::InvMass(Particle& particle2) const
   );
 }
 
-void Particle::Print() const
-{
-  ParticleType* particalType = fParticleTypes[fIParticle];
+void Particle::Print() const {
+  ParticleType *particalType = fParticleTypes[fIParticle];
   std::cout << "IParticle:" << fIParticle << " Name:" << particalType->GetName()
             << " Pulse:(" << fPx << ',' << fPy << ',' << fPz << ")\n";
 }
 
-void Particle::AddParticleType(std::string name,
-                               double mass,
-                               int charge,
-                               double width)
-{
+void Particle::AddParticleType(std::string name, double mass, int charge,
+                               double width) {
   if (fMaxNumParticleType != fNParticleType && FindParticle(name) == -1) {
     if (width == 0.) {
       fParticleTypes[fNParticleType] = new ParticleType(name, mass, charge);
@@ -72,15 +64,13 @@ void Particle::AddParticleType(std::string name,
   }
 }
 
-void Particle::PrintParticleTypes()
-{
+void Particle::PrintParticleTypes() {
   for (int i = 0; i != fNParticleType; ++i) {
     fParticleTypes[i]->Print();
   }
 }
 
-int Particle::FindParticle(std::string name)
-{
+int Particle::FindParticle(std::string name) {
   for (int i = 0; i != fNParticleType; ++i) {
     if (name == fParticleTypes[i]->GetName()) {
       return i;
@@ -89,8 +79,7 @@ int Particle::FindParticle(std::string name)
   return -1;
 }
 
-int Particle::Decay2body(Particle& dau1, Particle& dau2) const
-{
+int Particle::Decay2body(Particle &dau1, Particle &dau2) const {
   if (GetMass() == 0.0) {
     printf("Decayment cannot be preformed if mass is zero\n");
     return 1;
@@ -100,7 +89,7 @@ int Particle::Decay2body(Particle& dau1, Particle& dau2) const
   double massDau1 = dau1.GetMass();
   double massDau2 = dau2.GetMass();
 
-  if (fIParticle > -1) {  // add width effect
+  if (fIParticle > -1) { // add width effect
 
     // gaussian random numbers
 
@@ -121,9 +110,8 @@ int Particle::Decay2body(Particle& dau1, Particle& dau2) const
   }
 
   if (massMot < massDau1 + massDau2) {
-    printf(
-        "Decayment cannot be preformed because mass is too low in this "
-        "channel\n");
+    printf("Decayment cannot be preformed because mass is too low in this "
+           "channel\n");
     return 2;
   }
 
@@ -137,11 +125,9 @@ int Particle::Decay2body(Particle& dau1, Particle& dau2) const
 
   double phi = rand() * norm;
   double theta = rand() * norm * 0.5 - M_PI / 2.;
-  dau1.SetP(pout * sin(theta) * cos(phi),
-            pout * sin(theta) * sin(phi),
+  dau1.SetP(pout * sin(theta) * cos(phi), pout * sin(theta) * sin(phi),
             pout * cos(theta));
-  dau2.SetP(-pout * sin(theta) * cos(phi),
-            -pout * sin(theta) * sin(phi),
+  dau2.SetP(-pout * sin(theta) * cos(phi), -pout * sin(theta) * sin(phi),
             -pout * cos(theta));
 
   double energy = sqrt(fPx * fPx + fPy * fPy + fPz * fPz + massMot * massMot);
@@ -155,8 +141,8 @@ int Particle::Decay2body(Particle& dau1, Particle& dau2) const
 
   return 0;
 }
-void Particle::Boost(double bx, double by, double bz)
-{
+
+void Particle::Boost(double bx, double by, double bz) {
   double energy = GetEnergy();
 
   // Boost this Lorentz vector
