@@ -10,4 +10,4 @@ add_custom_command(
     DEPENDS Analysis runGeneration ${CMAKE_BINARY_DIR}/generation/Histograms.root
 )
 
-add_custom_target(runAnalysis DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Generation.pdf ${CMAKE_CURRENT_BINARY_DIR}/InvMass.pdf)
+add_custom_target(runAnalysis ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Generation.pdf ${CMAKE_CURRENT_BINARY_DIR}/InvMass.pdf)
