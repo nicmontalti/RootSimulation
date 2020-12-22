@@ -19,55 +19,6 @@ void AddParticleTypes() {
   Particle::AddParticleType("kaon*", 0.89166, 0, 0.050);
 }
 
-int GenerateParticles(
-    std::array<Particle, maxNumParticle + maxNumDecay> &particles) {
-  int nDecay = 0;
-
-  for (int i = 0; i != maxNumParticle; ++i) {
-    double phi = gRandom->Uniform(2 * TMath::Pi());
-    double theta = gRandom->Uniform(TMath::Pi());
-    double P = gRandom->Exp(1);
-
-    double Px = P * TMath::Sin(theta) * TMath::Cos(phi);
-    double Py = P * TMath::Sin(theta) * TMath::Sin(phi);
-    double Pz = P * TMath::Cos(theta);
-
-    particles[i].SetP(Px, Py, Pz);
-
-    double x = gRandom->Rndm();
-    if (x < 0.4) {
-      particles[i].SetParticleType("pion+");
-    } else if (x < 0.8) {
-      particles[i].SetParticleType("pion-");
-    } else if (x < 0.85) {
-      particles[i].SetParticleType("kaon+");
-    } else if (x < 0.9) {
-      particles[i].SetParticleType("kaon-");
-    } else if (x < 0.945) {
-      particles[i].SetParticleType("proton+");
-    } else if (x < 0.99) {
-      particles[i].SetParticleType("proton-");
-    } else {
-      particles[i].SetParticleType("kaon*");
-
-      double y = gRandom->Rndm();
-      if (y < 0.5) {
-        particles[maxNumParticle + nDecay].SetParticleType("pion+");
-        particles[maxNumParticle + nDecay + 1].SetParticleType("kaon-");
-      } else {
-        particles[maxNumParticle + nDecay].SetParticleType("pion-");
-        particles[maxNumParticle + nDecay + 1].SetParticleType("kaon+");
-      }
-
-      particles[i].Decay2body(particles[maxNumParticle + nDecay],
-                              particles[maxNumParticle + nDecay + 1]);
-
-      nDecay += 2;
-    }
-  }
-  return nDecay;
-}
-
 TList *FillHistos(int nEvents = 1e5) {
   auto hParticleTypes = new TH1F("hParticleTypes", "Particle types", 7, 0, 7);
   auto hAzimutalAngles = new TH1F(
@@ -101,31 +52,75 @@ TList *FillHistos(int nEvents = 1e5) {
 
   for (int i = 0; i != nEvents; ++i) {
     std::array<Particle, maxNumParticle + maxNumDecay> particles;
-    int nResonanceDecay = GenerateParticles(particles);
+    int nDecay = 0;
 
-    for (int i = 0; i != nResonanceDecay + maxNumParticle; ++i) {
+    for (int i = 0; i != maxNumParticle; ++i) {
+      double phi = gRandom->Uniform(2 * TMath::Pi());
+      double theta = gRandom->Uniform(TMath::Pi());
+      double P = gRandom->Exp(1);
+
+      double Px = P * TMath::Sin(theta) * TMath::Cos(phi);
+      double Py = P * TMath::Sin(theta) * TMath::Sin(phi);
+      double Pz = P * TMath::Cos(theta);
+      double transP = TMath::Sqrt(Px * Px + Py * Py);
+
+      particles[i].SetP(Px, Py, Pz);
+
+      hPolarAngles->Fill(phi);
+      hAzimutalAngles->Fill(theta);
+      hAngles->Fill(theta, phi);
+      hPulse->Fill(P);
+      hTransversePulse->Fill(transP);
+
+      double x = gRandom->Rndm();
+      if (x < 0.4) {
+        particles[i].SetParticleType("pion+");
+        hParticleTypes->Fill(0);
+      } else if (x < 0.8) {
+        particles[i].SetParticleType("pion-");
+        hParticleTypes->Fill(1);
+      } else if (x < 0.85) {
+        particles[i].SetParticleType("kaon+");
+        hParticleTypes->Fill(2);
+      } else if (x < 0.9) {
+        particles[i].SetParticleType("kaon-");
+        hParticleTypes->Fill(3);
+      } else if (x < 0.945) {
+        particles[i].SetParticleType("proton+");
+        hParticleTypes->Fill(4);
+      } else if (x < 0.99) {
+        particles[i].SetParticleType("proton-");
+        hParticleTypes->Fill(5);
+      } else {
+        particles[i].SetParticleType("kaon*");
+        hParticleTypes->Fill(6);
+
+        double y = gRandom->Rndm();
+        auto &childParticle1 = particles[maxNumParticle + nDecay];
+        auto &childParticle2 = particles[maxNumParticle + nDecay + 1];
+
+        if (y < 0.5) {
+          childParticle1.SetParticleType("pion+");
+          childParticle2.SetParticleType("kaon-");
+        } else {
+          childParticle1.SetParticleType("pion-");
+          childParticle2.SetParticleType("kaon+");
+        }
+
+        particles[i].Decay2body(childParticle1, childParticle2);
+
+        double invMass = childParticle1.InvMass(childParticle2);
+        hResonanceCoupleInvMass->Fill(invMass);
+
+        nDecay += 2;
+      }
+      hEnergy->Fill(particles[i].GetEnergy());
+    }
+
+    for (int i = 0; i != maxNumParticle + nDecay; ++i) {
       auto &particle = particles[i];
 
-      if (i < maxNumParticle) {
-        double Px = particle.GetPx();
-        double Py = particle.GetPy();
-        double Pz = particle.GetPz();
-
-        auto phi = TMath::ATan2(Py, Px) + TMath::Pi();
-        auto theta = TMath::ATan2(TMath::Sqrt(Px * Px + Py * Py), Pz);
-        auto P = TMath::Sqrt(Px * Px + Py * Py + Pz * Pz);
-        auto transP = TMath::Sqrt(Px * Px + Py * Py);
-
-        hParticleTypes->Fill(particle.GetIParticle());
-        hPolarAngles->Fill(phi);
-        hAzimutalAngles->Fill(theta);
-        hAngles->Fill(theta, phi);
-        hPulse->Fill(P);
-        hTransversePulse->Fill(transP);
-        hEnergy->Fill(particle.GetEnergy());
-      }
-
-      for (int j = i + 1; j != maxNumParticle + nResonanceDecay; ++j) {
+      for (int j = i + 1; j != maxNumParticle + nDecay; ++j) {
         auto &particle2 = particles[j];
         auto name = particle.GetName();
         auto name2 = particle2.GetName();
@@ -147,11 +142,6 @@ TList *FillHistos(int nEvents = 1e5) {
           }
         }
       }
-    }
-    for (int j = maxNumParticle; j != maxNumParticle + nResonanceDecay;
-         j += 2) {
-      double invMass = particles[j].InvMass(particles[j + 1]);
-      hResonanceCoupleInvMass->Fill(invMass);
     }
   }
 
@@ -179,7 +169,7 @@ int main() {
   gRandom->SetSeed();
   AddParticleTypes();
 
-  auto listHistos = FillHistos(1e5);
+  auto listHistos = FillHistos(1e6);
 
   auto file = new TFile("Histograms.root", "RECREATE");
   for (auto const histo : *listHistos) {
