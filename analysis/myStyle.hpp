@@ -9,13 +9,12 @@
 
 #endif
 
-void setMyStyle()
-{
+void setMyStyle() {
   // Add the saved style to the current ROOT session.
 
   delete gROOT->GetStyle("myStyle");
 
-  TStyle* tmpStyle = new TStyle("myStyle", "My Style");
+  TStyle *tmpStyle = new TStyle("myStyle", "My Style");
   tmpStyle->SetNdivisions(510, "x");
   tmpStyle->SetNdivisions(510, "y");
   tmpStyle->SetNdivisions(510, "z");
@@ -57,7 +56,7 @@ void setMyStyle()
   tmpStyle->SetOptLogz(0);
   tmpStyle->SetOptDate(0);
   tmpStyle->SetOptStat(10);
-  tmpStyle->SetOptTitle(kTRUE);
+  tmpStyle->SetOptTitle(kFALSE);
   tmpStyle->SetOptFit(111);
   tmpStyle->SetNumberContours(20);
   tmpStyle->GetAttDate()->SetTextFont(62);
@@ -121,9 +120,9 @@ void setMyStyle()
   tmpStyle->SetStatFont(42);
   tmpStyle->SetStatFontSize(0.040);
   tmpStyle->SetStatStyle(1001);
-  tmpStyle->SetStatFormat("6.4g");
-  tmpStyle->SetStatX(0.995);
-  tmpStyle->SetStatY(0.93);
+  tmpStyle->SetStatFormat("g");
+  tmpStyle->SetStatX(1.);
+  tmpStyle->SetStatY(0.95);
   tmpStyle->SetStatW(0.22);
   tmpStyle->SetStatH(0.19);
   tmpStyle->SetStripDecimals(kFALSE);
@@ -200,7 +199,7 @@ void setMyStyle()
 
   tmpStyle->SetHeaderPS("");
   tmpStyle->SetTitlePS("");
-  tmpStyle->SetFitFormat("5.4g");
+  tmpStyle->SetFitFormat("g");
   tmpStyle->SetPaintTextFormat("g");
   tmpStyle->SetLineScalePS(3);
   tmpStyle->SetJoinLinePS(0);

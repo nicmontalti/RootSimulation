@@ -12,4 +12,4 @@ add_custom_command(
     DEPENDS Generation
 )
 
-add_custom_target(runGeneration ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Histograms.root)
+add_custom_target(runGeneration DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Histograms.root)

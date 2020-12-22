@@ -7,7 +7,7 @@ target_link_libraries(Analysis ${ROOT_LIBRARIES})
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/Generation.pdf ${CMAKE_CURRENT_BINARY_DIR}/InvMass.pdf
     COMMAND Analysis ${CMAKE_BINARY_DIR}/generation/Histograms.root
-    DEPENDS Analysis runGeneration ${CMAKE_BINARY_DIR}/generation/Histograms.root
+    DEPENDS Analysis
 )
 
-add_custom_target(runAnalysis ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Generation.pdf ${CMAKE_CURRENT_BINARY_DIR}/InvMass.pdf)
+add_custom_target(runAnalysis DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Generation.pdf ${CMAKE_CURRENT_BINARY_DIR}/InvMass.pdf)

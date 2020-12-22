@@ -12,8 +12,7 @@
 
 #include "myStyle.hpp"
 
-void analysis(char* filePath)
-{
+void analysis(char *filePath) {
   setMyStyle();
   TGaxis::SetMaxDigits(3);
   gROOT->SetStyle("myStyle");
@@ -27,13 +26,13 @@ void analysis(char* filePath)
   {
     cGeneration->cd(1);
 
-    auto hParticleTypes = (TH1F*)fileHistograms->Get("hParticleTypes");
-    int entries = hParticleTypes->GetEntries();
+    auto hParticleTypes = (TH1F *)fileHistograms->Get("hParticleTypes");
+
     std::cout << "PARTICLE TYPES";
     for (int i = 1; i != 8; ++i) {
       std::cout << "IParticle: " << i << '\t'
-                << "Ratio: " << hParticleTypes->GetBinContent(i) / entries
-                << " +/- " << hParticleTypes->GetBinError(i) / entries << '\n';
+                << "Occurrences: " << hParticleTypes->GetBinContent(i)
+                << " +/- " << hParticleTypes->GetBinError(i) << '\n';
     }
     std::cout << '\n';
 
@@ -51,10 +50,11 @@ void analysis(char* filePath)
     hParticleTypes->SetFillColor(kBlue - 8);
     hParticleTypes->SetLabelSize(0.06, "x");
     hParticleTypes->SetStats(0);
-
     hParticleTypes->Draw();
 
     auto hExpectedParticleTypes = new TH1F(*hParticleTypes);
+    int entries = hParticleTypes->GetEntries();
+
     hExpectedParticleTypes->SetBinContent(1, 0.4 * entries);
     hExpectedParticleTypes->SetBinContent(2, 0.4 * entries);
     hExpectedParticleTypes->SetBinContent(3, 0.05 * entries);
@@ -76,17 +76,18 @@ void analysis(char* filePath)
   {
     cGeneration->cd(2);
 
-    auto hPulse = (TH1F*)fileHistograms->Get("hPulse");
+    auto hPulse = (TH1F *)fileHistograms->Get("hPulse");
     hPulse->Fit("expo", "Q");
     auto fitFunc = hPulse->GetFunction("expo");
+    double Chi = fitFunc->GetChisquare();
+    int dof = hPulse->GetNbinsX() - fitFunc->GetNpar();
 
     std::cout << "PULSE FIT\n"
               << "Tau: " << -fitFunc->GetParameter(1) << " +/- "
               << fitFunc->GetParError(1) << '\n'
-              << "Chi^2/dof: "
-              << fitFunc->GetChisquare() /
-                     (hPulse->GetNbinsX() - fitFunc->GetNpar())
-              << "\n\n";
+              << "Chi^2: " << Chi << '\n'
+              << "dof: " << dof << '\n'
+              << "Chi^2/dof: " << Chi / dof << "\n\n";
 
     hPulse->UseCurrentStyle();
     hPulse->GetXaxis()->SetTitle("Pulse (GeV)");
@@ -95,15 +96,14 @@ void analysis(char* filePath)
     hPulse->SetLineColor(kBlack);
     fitFunc->SetLineColor(kBlack);
     fitFunc->SetLineWidth(2);
-
     hPulse->Draw();
   }
 
   {
     cGeneration->cd(3);
 
-    auto hAzimutalAngles = (TH1F*)fileHistograms->Get("hAzimutalAngles");
-    auto hPolarAngles = (TH1F*)fileHistograms->Get("hPolarAngles");
+    auto hAzimutalAngles = (TH1F *)fileHistograms->Get("hAzimutalAngles");
+    auto hPolarAngles = (TH1F *)fileHistograms->Get("hPolarAngles");
 
     auto listAngles = new TList();
     listAngles->Add(hAzimutalAngles);
@@ -111,18 +111,19 @@ void analysis(char* filePath)
 
     for (int i = 0; i != 2; ++i) {
       cGeneration->cd(i + 3);
-      auto h = (TH1F*)listAngles->At(i);
+      auto h = (TH1F *)listAngles->At(i);
 
       h->Fit("pol0", "Q");
       auto fitFunc = h->GetFunction("pol0");
+      double Chi = fitFunc->GetChisquare();
+      int dof = h->GetNbinsX() - fitFunc->GetNpar();
 
-      std::cout << "AZIMUTAL ANGLES FIT\n"
+      std::cout << h->GetTitle() << " FIT\n"
                 << "Parameter: " << fitFunc->GetParameter(0) << " +/- "
                 << fitFunc->GetParError(0) << '\n'
-                << "Chi^2/dof: "
-                << fitFunc->GetChisquare() /
-                       (h->GetNbinsX() - fitFunc->GetNpar())
-                << "\n\n";
+                << "Chi^2: " << Chi << '\n'
+                << "dof: " << dof << '\n'
+                << "Chi^2/dof: " << Chi / dof << "\n\n";
 
       h->UseCurrentStyle();
       h->SetXTitle("Angle (rad)");
@@ -133,24 +134,23 @@ void analysis(char* filePath)
       h->SetMarkerColor(kBlack);
       h->SetLineColor(kBlack);
       fitFunc->SetLineColor(kRed + 1);
-
       h->Draw("E1P");
     }
   }
 
   {
-    auto hConcordantInvMass = (TH1F*)fileHistograms->Get("hConcordantInvMass");
-    auto hDiscordantInvMass = (TH1F*)fileHistograms->Get("hDiscordantInvMass");
+    auto hConcordantInvMass = (TH1F *)fileHistograms->Get("hConcordantInvMass");
+    auto hDiscordantInvMass = (TH1F *)fileHistograms->Get("hDiscordantInvMass");
     auto hConcordantPionKaonInvMass =
-        (TH1F*)fileHistograms->Get("hConcordantPionKaonInvMass");
+        (TH1F *)fileHistograms->Get("hConcordantPionKaonInvMass");
     auto hDiscordantPionKaonInvMass =
-        (TH1F*)fileHistograms->Get("hDiscordantPionKaonInvMass");
+        (TH1F *)fileHistograms->Get("hDiscordantPionKaonInvMass");
     auto hResonanceCoupleInvMass =
-        (TH1F*)fileHistograms->Get("hResonanceCoupleInvMass");
+        (TH1F *)fileHistograms->Get("hResonanceCoupleInvMass");
 
     auto hDifferencePionKaonInvMass = new TH1F(*hDiscordantPionKaonInvMass);
-    hDifferencePionKaonInvMass->Add(
-        hDiscordantPionKaonInvMass, hConcordantPionKaonInvMass, 1, -1);
+    hDifferencePionKaonInvMass->Add(hDiscordantPionKaonInvMass,
+                                    hConcordantPionKaonInvMass, 1, -1);
     hDifferencePionKaonInvMass->GetXaxis()->SetRangeUser(0.89166 - 0.2,
                                                          0.89166 + 0.2);
 
@@ -167,18 +167,31 @@ void analysis(char* filePath)
 
     for (int i = 0; i != 3; ++i) {
       cInvMass->cd(i + 1);
-      auto h = (TH1F*)listInvMass->At(i);
-      h->UseCurrentStyle();
-      h->Fit("gaus", "Q");
-      auto func = h->GetFunction("gaus");
+      auto h = (TH1F *)listInvMass->At(i);
 
+      h->Fit("gaus", "Q");
+      auto fitFunc = h->GetFunction("gaus");
+      double Chi = fitFunc->GetChisquare();
+      int dof = h->GetNbinsX() - fitFunc->GetNpar();
+
+      std::cout << "GAUS FIT " << i << '\n'
+                << "Amplitude : " << fitFunc->GetParameter(0) << " +/- "
+                << fitFunc->GetParError(0) << '\n'
+                << "Mean : " << fitFunc->GetParameter(1) << " +/- "
+                << fitFunc->GetParError(1) << '\n'
+                << "Sigma : " << fitFunc->GetParameter(2) << " +/- "
+                << fitFunc->GetParError(2) << '\n'
+                << "Chi^2: " << Chi << '\n'
+                << "dof: " << dof << '\n'
+                << "Chi^2/dof: " << Chi / dof << "\n\n";
+
+      h->UseCurrentStyle();
       h->SetXTitle("Invariant mass (GeV/c^2)");
       h->SetYTitle("Occurences");
       h->SetFillColorAlpha(colors[i], 0.5);
       h->SetLineColor(kBlack);
-      func->SetLineColor(kBlack);
-      func->SetLineWidth(2);
-
+      fitFunc->SetLineColor(kBlack);
+      fitFunc->SetLineWidth(2);
       h->Draw();
     }
   }
@@ -192,4 +205,4 @@ void analysis(char* filePath)
   cInvMass->SaveAs("InvMass.root");
 }
 
-int main(int argc, char* argv[]) { analysis(argv[1]); }
+int main(int argc, char *argv[]) { analysis(argv[1]); }

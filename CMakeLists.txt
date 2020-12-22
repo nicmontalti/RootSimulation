@@ -10,7 +10,7 @@ find_package(ROOT)
 
 include(${ROOT_USE_FILE})
 
-add_compile_options(-Wall -Wextra)
+add_compile_options(-Wall -Wextra -O3)
 
 add_subdirectory(generation)
 add_subdirectory(analysis)
