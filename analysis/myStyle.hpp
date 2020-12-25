@@ -55,7 +55,7 @@ void setMyStyle() {
   tmpStyle->SetOptLogy(0);
   tmpStyle->SetOptLogz(0);
   tmpStyle->SetOptDate(0);
-  tmpStyle->SetOptStat(10);
+  tmpStyle->SetOptStat(0);
   tmpStyle->SetOptTitle(kFALSE);
   tmpStyle->SetOptFit(111);
   tmpStyle->SetNumberContours(20);

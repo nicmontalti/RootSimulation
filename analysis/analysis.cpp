@@ -28,7 +28,7 @@ void analysis(char *filePath) {
 
     auto hParticleTypes = (TH1D *)fileHistograms->Get("hParticleTypes");
 
-    std::cout << "PARTICLE TYPES";
+    std::cout << "PARTICLE TYPES\n";
     for (int i = 1; i != 8; ++i) {
       std::cout << "IParticle: " << i << '\t'
                 << "Occurrences: " << hParticleTypes->GetBinContent(i)
@@ -148,16 +148,18 @@ void analysis(char *filePath) {
     auto hResonanceCoupleInvMass =
         (TH1F *)fileHistograms->Get("hResonanceCoupleInvMass");
 
-    hDiscordantPionKaonInvMass->Sumw2();
     auto hDifferencePionKaonInvMass =
         (TH1F *)hDiscordantPionKaonInvMass->Clone("hDifferencePionKaonInvMass");
+    hDifferencePionKaonInvMass->Sumw2();
     hDifferencePionKaonInvMass->Add(hDiscordantPionKaonInvMass,
                                     hConcordantPionKaonInvMass, 1, -1);
     hDifferencePionKaonInvMass->GetXaxis()->SetRangeUser(0.89166 - 0.2,
                                                          0.89166 + 0.2);
     hDiscordantInvMass->Sumw2();
-    auto hDifferenceInvMass =
-        (TH1D *)hDiscordantInvMass->Clone("hDifferenceInvMass");
+    auto hDifferenceInvMass = (TH1D *)hDiscordantInvMass->Clone("hDiff"
+                                                                "erenc"
+                                                                "eInvM"
+                                                                "ass");
     hDifferenceInvMass->Add(hDiscordantInvMass, hConcordantInvMass, 1, -1);
     hDifferenceInvMass->GetXaxis()->SetRangeUser(0.89166 - 0.2, 0.89166 + 0.2);
 
@@ -189,7 +191,8 @@ void analysis(char *filePath) {
                 << "Chi^2/dof: " << Chi / dof << "\n\n";
 
       h->UseCurrentStyle();
-      h->SetXTitle("Invariant mass (GeV/c^2)");
+      h->SetXTitle("Invariant mass "
+                   "(GeV/c^2)");
       h->SetYTitle("Occurences");
       h->SetFillColorAlpha(colors[i], 0.5);
       h->SetLineColor(kBlack);
