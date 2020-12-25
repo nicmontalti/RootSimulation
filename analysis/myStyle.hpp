@@ -37,7 +37,7 @@ void setMyStyle() {
   tmpStyle->SetTickLength(0.03, "y");
   tmpStyle->SetTickLength(0.03, "z");
   tmpStyle->SetTitleOffset(1, "x");
-  tmpStyle->SetTitleOffset(1, "y");
+  tmpStyle->SetTitleOffset(1.2, "y");
   tmpStyle->SetTitleOffset(1, "z");
   tmpStyle->SetTitleSize(0.045, "x");
   tmpStyle->SetTitleSize(0.045, "y");

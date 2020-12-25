@@ -26,7 +26,7 @@ void analysis(char *filePath) {
   {
     cGeneration->cd(1);
 
-    auto hParticleTypes = (TH1F *)fileHistograms->Get("hParticleTypes");
+    auto hParticleTypes = (TH1D *)fileHistograms->Get("hParticleTypes");
 
     std::cout << "PARTICLE TYPES";
     for (int i = 1; i != 8; ++i) {
@@ -52,7 +52,7 @@ void analysis(char *filePath) {
     hParticleTypes->SetStats(0);
     hParticleTypes->Draw();
 
-    auto hExpectedParticleTypes = new TH1F(*hParticleTypes);
+    auto hExpectedParticleTypes = new TH1D(*hParticleTypes);
     int entries = hParticleTypes->GetEntries();
 
     hExpectedParticleTypes->SetBinContent(1, 0.4 * entries);
@@ -76,7 +76,7 @@ void analysis(char *filePath) {
   {
     cGeneration->cd(2);
 
-    auto hPulse = (TH1F *)fileHistograms->Get("hPulse");
+    auto hPulse = (TH1D *)fileHistograms->Get("hPulse");
     hPulse->Fit("expo", "Q");
     auto fitFunc = hPulse->GetFunction("expo");
     double Chi = fitFunc->GetChisquare();
@@ -139,8 +139,8 @@ void analysis(char *filePath) {
   }
 
   {
-    auto hConcordantInvMass = (TH1F *)fileHistograms->Get("hConcordantInvMass");
-    auto hDiscordantInvMass = (TH1F *)fileHistograms->Get("hDiscordantInvMass");
+    auto hConcordantInvMass = (TH1D *)fileHistograms->Get("hConcordantInvMass");
+    auto hDiscordantInvMass = (TH1D *)fileHistograms->Get("hDiscordantInvMass");
     auto hConcordantPionKaonInvMass =
         (TH1F *)fileHistograms->Get("hConcordantPionKaonInvMass");
     auto hDiscordantPionKaonInvMass =
@@ -148,26 +148,29 @@ void analysis(char *filePath) {
     auto hResonanceCoupleInvMass =
         (TH1F *)fileHistograms->Get("hResonanceCoupleInvMass");
 
-    auto hDifferencePionKaonInvMass = new TH1F(*hDiscordantPionKaonInvMass);
+    hDiscordantPionKaonInvMass->Sumw2();
+    auto hDifferencePionKaonInvMass =
+        (TH1F *)hDiscordantPionKaonInvMass->Clone("hDifferencePionKaonInvMass");
     hDifferencePionKaonInvMass->Add(hDiscordantPionKaonInvMass,
                                     hConcordantPionKaonInvMass, 1, -1);
     hDifferencePionKaonInvMass->GetXaxis()->SetRangeUser(0.89166 - 0.2,
                                                          0.89166 + 0.2);
-
-    auto hDifferenceInvMass = new TH1F(*hDiscordantInvMass);
+    hDiscordantInvMass->Sumw2();
+    auto hDifferenceInvMass =
+        (TH1D *)hDiscordantInvMass->Clone("hDifferenceInvMass");
     hDifferenceInvMass->Add(hDiscordantInvMass, hConcordantInvMass, 1, -1);
     hDifferenceInvMass->GetXaxis()->SetRangeUser(0.89166 - 0.2, 0.89166 + 0.2);
 
     auto listInvMass = new TList();
-    listInvMass->Add(hDifferencePionKaonInvMass);
     listInvMass->Add(hDifferenceInvMass);
+    listInvMass->Add(hDifferencePionKaonInvMass);
     listInvMass->Add(hResonanceCoupleInvMass);
 
     int colors[3] = {45, 31, 38};
 
     for (int i = 0; i != 3; ++i) {
       cInvMass->cd(i + 1);
-      auto h = (TH1F *)listInvMass->At(i);
+      auto h = (TH1D *)listInvMass->At(i);
 
       h->Fit("gaus", "Q");
       auto fitFunc = h->GetFunction("gaus");
@@ -192,7 +195,8 @@ void analysis(char *filePath) {
       h->SetLineColor(kBlack);
       fitFunc->SetLineColor(kBlack);
       fitFunc->SetLineWidth(2);
-      h->Draw();
+      h->Draw("HIST");
+      h->Draw("E1,X0,same");
     }
   }
 

@@ -5,6 +5,7 @@
 #include "TMath.h"
 #include "TRandom.h"
 #include <array>
+#include <iostream>
 
 int constexpr maxNumParticle = 100;
 int constexpr maxNumDecay = 20;
@@ -19,23 +20,23 @@ void AddParticleTypes() {
   Particle::AddParticleType("kaon*", 0.89166, 0, 0.050);
 }
 
-TList *FillHistos(int nEvents = 1e5) {
-  auto hParticleTypes = new TH1F("hParticleTypes", "Particle types", 7, 0, 7);
+TList *FillHistos(int nEvents = 1e6) {
+  auto hParticleTypes = new TH1D("hParticleTypes", "Particle types", 7, 0, 7);
   auto hAzimutalAngles = new TH1F(
       "hAzimutalAngles", "Azimutal angles distribution", 10, 0, TMath::Pi());
   auto hPolarAngles = new TH1F("hPolarAngles", "Polar angles distribution", 10,
                                0, 2 * TMath::Pi());
   auto hAngles = new TH2F("hAngles", "Angles distribution", 10, 10, 0,
                           TMath::Pi(), 0, 2 * TMath::Pi());
-  auto hPulse = new TH1F("hPulse", "Pulse", 20, 0, 5);
+  auto hPulse = new TH1D("hPulse", "Pulse", 20, 0, 5);
   auto hTransversePulse =
-      new TH1F("hTransversePulse", "Transverse pulse", 20, 0, 5);
-  auto hEnergy = new TH1F("hEnergy", "Energy", 200, 0, 5);
-  auto hInvMass = new TH1F("hInvMass", "Invariant mass", 200, 0, 5);
-  auto hConcordantInvMass = new TH1F(
+      new TH1D("hTransversePulse", "Transverse pulse", 20, 0, 5);
+  auto hEnergy = new TH1D("hEnergy", "Energy", 20, 0, 5);
+  auto hInvMass = new TH1D("hInvMass", "Invariant mass", 20, 0, 5);
+  auto hConcordantInvMass = new TH1D(
       "hConcordantInvMass",
       "Invariant mass of particles with concordant charge sign", 200, 0, 5);
-  auto hDiscordantInvMass = new TH1F(
+  auto hDiscordantInvMass = new TH1D(
       "hDiscordantInvMass",
       "Invariant mass of particles with discordant charge sign", 200, 0, 5);
   auto hConcordantPionKaonInvMass =
@@ -50,7 +51,7 @@ TList *FillHistos(int nEvents = 1e5) {
       "hResonanceCoupleInvMass", "Invariant mass of decayed particles couples",
       24, 0.89166 - 0.2, 0.89166 + 0.2);
 
-  for (int i = 0; i != nEvents; ++i) {
+  for (int k = 0; k != nEvents; ++k) {
     std::array<Particle, maxNumParticle + maxNumDecay> particles;
     int nDecay = 0;
 
@@ -142,6 +143,9 @@ TList *FillHistos(int nEvents = 1e5) {
           }
         }
       }
+    }
+    if ((k % 10000) == 0) {
+      std::cout << k / 10000 << "%\n";
     }
   }
 

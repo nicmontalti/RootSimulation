@@ -93,7 +93,7 @@ int Particle::Decay2body(Particle &dau1, Particle &dau2) const {
 
     // gaussian random numbers
 
-    float x1, x2, w, y1, y2;
+    float x1, x2, w, y;
 
     double invnum = 1. / RAND_MAX;
     do {
@@ -103,10 +103,9 @@ int Particle::Decay2body(Particle &dau1, Particle &dau2) const {
     } while (w >= 1.0);
 
     w = sqrt((-2.0 * log(w)) / w);
-    y1 = x1 * w;
-    y2 = x2 * w;
+    y = x1 * w;
 
-    massMot += fParticleTypes[fIParticle]->GetWidth() * y1;
+    massMot += fParticleTypes[fIParticle]->GetWidth() * y;
   }
 
   if (massMot < massDau1 + massDau2) {
