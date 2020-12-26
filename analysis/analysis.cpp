@@ -198,8 +198,9 @@ void analysis(char *filePath) {
       h->SetLineColor(kBlack);
       fitFunc->SetLineColor(kBlack);
       fitFunc->SetLineWidth(2);
-      h->Draw("HIST");
-      h->Draw("E1,X0,same");
+      h->Draw("E1, X0");
+      h->Draw("HIST, same");
+      h->Draw("E1, X0, same");
     }
   }
 

@@ -101,7 +101,7 @@ Per risalire alle caratteristiche delle $K*$ decadute si è sfruttato il fatto c
 
 Per migliorare la precisione della misura si è riutilizzato il metodo appena descritto restringendolo ai soli pioni e kaoni, dato che i decadimenti non producono protoni. L'esito del fit, insieme a un fit gaussiano di controllo eseguito sulle masse invarianti tra le sole $K^*$, è riportato in tab.~\ref*{tab:fitgaus}. In fig.~\ref*{fig:InvMass} sono riportati i tre istogrammi della massa invariante coi rispettivi fit.
 
-Gli esiti di tutti e tre i metodi di calcolo restituiscono $\chi^2$ accettabili e sono compatibili con i valori attesi di media (0.89166~GeV/c$^2$) e deviazione standard (0.050~GeV/c$^2$). È inoltre rilevante come restringere il calcolo ai soli pioni e kaoni riduca l'errore di più di un ordine di grandezza.
+Gli esiti di tutti e tre i metodi di calcolo restituiscono $\chi^2$ accettabili e sono compatibili con i valori attesi di media (0.89166~GeV/c$^2$) e deviazione standard (0.050~GeV/c$^2$), ad eccezione della $\sigma$ della massa invariante calcolata tra i prodotti dei decadimenti delle $K^*$, per cui la discrepanza è significativa ($p = 0.037$). Anche ripetendo la generazione non si è riuscito ad eliminare la discrepanza. È infine rilevante notare come restringendo il calcolo ai soli pioni e kaoni l'errore si riduca di un fattore 2.
 
 \begin{table*}
   %  }
@@ -112,15 +112,15 @@ Gli esiti di tutti e tre i metodi di calcolo restituiscono $\chi^2$ accettabili 
   \centering
   \begin{tabular}{cccc}
     \toprule
-    Specie  & Occorrenze osservate $(10^6)$ & Occorrenze attese $(10^6)$ \\
+    Specie  & Occorrenze osservate $(10^5)$ & Occorrenze attese $(10^5)$ \\
     \midrule
-    $\pi^+$ & 39.999 $\pm$ 0.006            & 40                         \\
-    $\pi^-$ & 40.002 $\pm$ 0.006            & 40                         \\
-    $K^+$   & 4.997 $\pm$ 0.002             & 5.0                        \\
-    $K^-$   & 5.002 $\pm$ 0.002             & 5.0                        \\
-    $p^+$   & 4.500 $\pm$ 0.002             & 4.5                        \\
-    $p^-$   & 4.500 $\pm$ 0.002             & 4.5                        \\
-    $K^*$   & 0.9995 $\pm$ 0.0010           & 1.0                        \\
+    $\pi^+$ & 40.03 $\pm$ 0.02              & 40                         \\
+    $\pi^-$ & 39.98 $\pm$ 0.02              & 40                         \\
+    $K^+$   & 5.010 $\pm$ 0.007             & 5.0                        \\
+    $K^-$   & 4.996 $\pm$ 0.007             & 5.0                        \\
+    $p^+$   & 4.490 $\pm$ 0.007             & 4.5                        \\
+    $p^-$   & 4.490 $\pm$ 0.007             & 4.5                        \\
+    $K^*$   & 1.005 $\pm$ 0.003             & 1.0                        \\
     \bottomrule
   \end{tabular}
   %  }
@@ -133,12 +133,12 @@ Gli esiti di tutti e tre i metodi di calcolo restituiscono $\chi^2$ accettabili 
   \centering
   \begin{tabular}{cccccc}
     \toprule
-    Variabile        & Distribuzione & Parametro del fit                         & $\chi^2$ & DOF & $\chi^2$/DOF \\
+    Variabile        & Distribuzione & Parametro del fit                     & $\chi^2$ & DOF & $\chi^2$/DOF \\
     \midrule
-    Modulo           & expo          & (1.00008 $\pm$ 0.00011) GeV               & 17.57    & 18  & 0.98         \\
+    Modulo           & expo          & (1.0000 $\pm$ 0.0003) GeV             & 14.72    & 18  & 0.82         \\
     \midrule
-    Angolo azimutale & pol0          & $(10000.0 \pm 1.0) \cdot 10^3$ rad$^{-1}$ & 13.47    & 9   & 1.50         \\
-    Angolo polare    & pol0          & $(10000.0 \pm 1.0) \cdot 10^3$ rad$^{-1}$ & 9.89     & 9   & 1.10         \\
+    Angolo azimutale & pol0          & $(10000 \pm 3) \cdot 10^2$ rad$^{-1}$ & 10.98    & 9   & 1.22         \\
+    Angolo polare    & pol0          & $(10000 \pm 3) \cdot 10^2$ rad$^{-1}$ & 4.86     & 9   & 0.54         \\
     \bottomrule
   \end{tabular}
 \end{table*}
@@ -156,13 +156,13 @@ Gli esiti di tutti e tre i metodi di calcolo restituiscono $\chi^2$ accettabili 
   \centering
   \begin{tabular}{p{4.5cm}cccc}
     \toprule
-    Distribuzione gaussiana                                                                                        & Media (Gev/c$^2$)     & Sigma ($10^{-2}$ GeV/c$^2$) & Ampiezza ($10^5$)   & $\chi^2$/DOF \\
+    Distribuzione gaussiana                                                                                        & Media (Gev/c$^2$)     & Sigma ($10^{-2}$ GeV/c$^2$) & Ampiezza ($10^4$) & $\chi^2$/DOF \\
     \midrule
-    Massa invariante ottenuta dalla differenza delle combinazioni di particelle di carica discorde e concorde      & 0.8920 $\pm$ 0.0015   & 5.08 $\pm$ 0.16             & 2.04 $\pm$ 0.05     & 0.81         \\
+    Massa invariante ottenuta dalla differenza delle combinazioni di particelle di carica discorde e concorde      & 0.896 $\pm$ 0.004     & 4.9 $\pm$ 0.4               & 2.22 $\pm$ 0.17   & 0.88         \\
     \midrule
-    Massa invariante ottenuta da differenza delle combinazioni di particelle $\pi K$ di carica discorde e concorde & 0.8914 $\pm$ 0.0006   & 5.05 $\pm$ 0.06             & 1.96 $\pm$ 0.02     & 0.97         \\
+    Massa invariante ottenuta da differenza delle combinazioni di particelle $\pi K$ di carica discorde e concorde & 0.890 $\pm$ 0.002     & 5.00 $\pm$ 0.19             & 1.97 $\pm$ 0.07   & 1.42         \\
     \midrule
-    Massa invariante ottenuta dalle particelle generate dai decadimenti delle $K^*$                                & 0.89168 $\pm$ 0.00005 & 5.027 $\pm$ 0.004           & 1.3219 $\pm$ 0.0016 & 0.96         \\
+    Massa invariante ottenuta dalle particelle generate dai decadimenti delle $K^*$                                & 0.89189 $\pm$ 0.00016 & 5.024 $\pm$ 0.011           & 1.330 $\pm$ 0.005 & 0.89         \\
     \bottomrule
   \end{tabular}
 \end{table*}

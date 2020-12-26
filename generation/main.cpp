@@ -20,7 +20,7 @@ void AddParticleTypes() {
   Particle::AddParticleType("kaon*", 0.89166, 0, 0.050);
 }
 
-TList *FillHistos(int nEvents = 1e6) {
+TList *FillHistos(int nEvents = 1e5) {
   auto hParticleTypes = new TH1D("hParticleTypes", "Particle types", 7, 0, 7);
   auto hAzimutalAngles = new TH1F(
       "hAzimutalAngles", "Azimutal angles distribution", 10, 0, TMath::Pi());
@@ -144,9 +144,6 @@ TList *FillHistos(int nEvents = 1e6) {
         }
       }
     }
-    if ((k % 10000) == 0) {
-      std::cout << k / 10000 << "%\n";
-    }
   }
 
   auto listHistos = new TList{};
@@ -173,7 +170,7 @@ int main() {
   gRandom->SetSeed();
   AddParticleTypes();
 
-  auto listHistos = FillHistos(1e6);
+  auto listHistos = FillHistos(1e5);
 
   auto file = new TFile("Histograms.root", "RECREATE");
   for (auto const histo : *listHistos) {
