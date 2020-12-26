@@ -93,7 +93,7 @@ int Particle::Decay2body(Particle &dau1, Particle &dau2) const {
 
     // gaussian random numbers
 
-    float x1, x2, w, y;
+    double x1, x2, w, y;
 
     double invnum = 1. / RAND_MAX;
     do {

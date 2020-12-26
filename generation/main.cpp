@@ -17,7 +17,7 @@ void AddParticleTypes() {
   Particle::AddParticleType("kaon-", 0.49367, -1);
   Particle::AddParticleType("proton+", 0.93827, 1);
   Particle::AddParticleType("proton-", 0.93827, -1);
-  Particle::AddParticleType("kaon*", 0.89166, 0, 0.050);
+  Particle::AddParticleType("kaon*", 0.89166, 0, 0.05);
 }
 
 TList *FillHistos(int nEvents = 1e5) {
@@ -49,7 +49,7 @@ TList *FillHistos(int nEvents = 1e5) {
                200, 0, 5);
   auto hResonanceCoupleInvMass = new TH1F(
       "hResonanceCoupleInvMass", "Invariant mass of decayed particles couples",
-      24, 0.89166 - 0.2, 0.89166 + 0.2);
+      60, 0.89166 - 0.25, 0.89166 + 0.25);
 
   for (int k = 0; k != nEvents; ++k) {
     std::array<Particle, maxNumParticle + maxNumDecay> particles;
@@ -170,7 +170,7 @@ int main() {
   gRandom->SetSeed();
   AddParticleTypes();
 
-  auto listHistos = FillHistos(1e5);
+  auto listHistos = FillHistos(1e6);
 
   auto file = new TFile("Histograms.root", "RECREATE");
   for (auto const histo : *listHistos) {

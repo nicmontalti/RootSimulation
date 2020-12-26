@@ -147,21 +147,24 @@ void analysis(char *filePath) {
         (TH1F *)fileHistograms->Get("hDiscordantPionKaonInvMass");
     auto hResonanceCoupleInvMass =
         (TH1F *)fileHistograms->Get("hResonanceCoupleInvMass");
+    hResonanceCoupleInvMass->Rebin(2);
 
     auto hDifferencePionKaonInvMass =
         (TH1F *)hDiscordantPionKaonInvMass->Clone("hDifferencePionKaonInvMass");
     hDifferencePionKaonInvMass->Sumw2();
     hDifferencePionKaonInvMass->Add(hDiscordantPionKaonInvMass,
                                     hConcordantPionKaonInvMass, 1, -1);
-    hDifferencePionKaonInvMass->GetXaxis()->SetRangeUser(0.89166 - 0.2,
-                                                         0.89166 + 0.2);
+    hDifferencePionKaonInvMass->GetXaxis()->SetRangeUser(0.89166 - 0.25,
+                                                         0.89166 + 0.25);
     hDiscordantInvMass->Sumw2();
     auto hDifferenceInvMass = (TH1D *)hDiscordantInvMass->Clone("hDiff"
                                                                 "erenc"
                                                                 "eInvM"
                                                                 "ass");
     hDifferenceInvMass->Add(hDiscordantInvMass, hConcordantInvMass, 1, -1);
-    hDifferenceInvMass->GetXaxis()->SetRangeUser(0.89166 - 0.2, 0.89166 + 0.2);
+    hDifferenceInvMass->Rebin(2);
+    hDifferenceInvMass->GetXaxis()->SetRangeUser(0.89166 - 0.25,
+                                                 0.89166 + 0.25);
 
     auto listInvMass = new TList();
     listInvMass->Add(hDifferenceInvMass);
