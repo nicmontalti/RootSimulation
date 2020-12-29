@@ -18,12 +18,9 @@
 
 \usepackage[dvipsnames]{xcolor}
 \definecolor{veryLightGrey}{rgb}{0.9629411,0.9629411,0.9629411}
-\definecolor{myred}{RGB}{220,20,60}
-\definecolor{mygreen}{RGB}{46,139,87}
 \usepackage{listings}
 \renewcommand{\lstlistingname}{Listato}
 \renewcommand{\lstlistlistingname}{Indice dei listati}
-
 
 \lstset{
 inputpath=/home/egg/uni/root/RootSimulation/,
@@ -101,10 +98,7 @@ Per migliorare la precisione della misura si è riutilizzato il metodo appena de
 
 Gli esiti di tutti e tre i metodi di calcolo restituiscono $\chi^2$ accettabili e sono compatibili con i valori attesi di media (0.89166~GeV/c$^2$) e deviazione standard (0.050~GeV/c$^2$), ad eccezione della $\sigma$ della massa invariante calcolata tra i prodotti dei decadimenti delle $K^*$, per cui la discrepanza è significativa ($p = 0.037$). Anche ripetendo la generazione non si è riuscito ad eliminare la discrepanza. È infine rilevante notare come restringendo il calcolo ai soli pioni e kaoni l'errore si riduca di un fattore 2.
 
-\begin{table*}
-  %  }
-  %  \qquad\qquad
-  %  \subfloat[Abbondanza osservata e attesa delle particelle]{
+\begin{table}
   \caption{Abbondanza attesa e osservata delle particelle generate divise per tipo}
   \label{tab:abbondanza}
   \centering
@@ -121,11 +115,10 @@ Gli esiti di tutti e tre i metodi di calcolo restituiscono $\chi^2$ accettabili 
     $K^*$   & 1.005 $\pm$ 0.003             & 1.0                        \\
     \bottomrule
   \end{tabular}
-  %  }
-\end{table*}
+\end{table}
 
 
-\begin{table*}[p]
+\begin{table}[p]
   \caption{Fit del modulo e degli angoli azimutali e polari dell'impulso delle particelle generate}
   \label{tab:fit}
   \centering
@@ -139,7 +132,7 @@ Gli esiti di tutti e tre i metodi di calcolo restituiscono $\chi^2$ accettabili 
     Angolo polare    & pol0          & $(10000 \pm 3) \cdot 10^2$ rad$^{-1}$ & 4.86     & 9   & 0.54         \\
     \bottomrule
   \end{tabular}
-\end{table*}
+\end{table}
 
 \begin{figure*}[p]
   \centering
