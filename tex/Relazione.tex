@@ -87,16 +87,18 @@ La generazione avviene nel file main.cpp (list.~\ref{main.cpp}). Inizialmente ve
   \end{tabular}
 \end{table*}
 
-Durante la generazione vengono riempiti una serie di istogrammi. Vengono salvati i tipi di particella generati, il modulo e la direzione dell'impulso, l'energia e la massa invariante. In particolare per la massa invariante vengono creati cinque istogrammi. Nel primo la massa invariante viene calcolata tra tutte le particelle di ogni evento; in altri due solo tra le particelle di carica uguale e di carica opposta; negli ultimi solo tra pioni a kaoni di carica uguale e di carica opposta. Tutti gli istogrammi vengono poi salvati in un file ROOT per essere analizzati successivamente.
+Durante la generazione vengono riempiti una serie di istogrammi. Vengono salvati i tipi di particella generati, il modulo e la direzione dell'impulso, l'energia e la massa invariante. In particolare per la massa invariante vengono creati cinque istogrammi. Nel primo la massa invariante viene calcolata tra tutte le particelle di ogni evento; in altri due solo tra le particelle di carica uguale e di carica opposta; negli ultimi solo tra un pione e un kaone di carica uguale e di carica opposta. Tutti gli istogrammi vengono poi salvati in un file ROOT per essere analizzati successivamente.
 
 \section{Analisi}
-L'analisi è codificata nel file analysis.cpp (list.~\ref{analysis.cpp}). Come si può osservare nella tab.~\ref{tab:abbondanza} e nel primo istogramma in fig.~\ref{fig:Generation}, l'abbondanza delle varie specie di particella è compatibile con i valori attesi. Il modulo dell'impulso si distribuisce secondo una distribuzione esponenziale di media compatibile con il valore atteso 1 GeV e con un $\chi^2$ accettabile. Allo stesso modo gli angoli azimutali e polari dell'impulso sono compatibili con una distribuzione uniforme definita sui rispettivi domini.
+L'analisi è codificata nel file analysis.cpp (list.~\ref{analysis.cpp}). Come si può osservare nella tab.~\ref{tab:abbondanza} e nel primo istogramma in fig.~\ref{fig:Generation}, l'abbondanza delle varie specie è compatibile con i valori attesi. Il modulo dell'impulso si distribuisce secondo una distribuzione esponenziale di media compatibile con il valore atteso 1 GeV e con un $\chi^2$ accettabile. Allo stesso modo gli angoli azimutali e polari dell'impulso sono compatibili con una distribuzione uniforme definita sui rispettivi domini.
 
-Per risalire alle caratteristiche delle $K^*$ decadute si è sfruttato il fatto che ogni decadimento produca un kaone e un pione di carica opposta. L'insieme delle particelle di carica concorde contiene quindi solo particelle che non sono state originate da un decadimento, mentre quello delle particelle di carica opposta contiene le particelle originate dal decadimento più le altre. Sottraendo il secondo dal primo si elimina gran parte del fondo delle particelle non originate dai decadimenti. Fittando l'istogramma delle masse invarianti tra questo gruppo di particelle si ottiene una gaussiana con media pari alla massa delle $K^*$ e deviazione standard pari alla larghezza di risonanza. In tab.~\ref{tab:fitgaus} è riportato l'esito del fit.
+Per risalire alle caratteristiche delle $K^*$ decadute si è sfruttato il fatto che ogni decadimento produca un kaone e un pione di carica opposta. L'insieme delle particelle di carica concorde contiene quindi solo particelle che non sono state originate da un decadimento, mentre quello delle particelle di carica opposta contiene le particelle originate dai decadimenti più le altre. Sottraendo il secondo dal primo si elimina gran parte del fondo delle particelle non originate dai decadimenti. Fittando l'istogramma delle masse invarianti tra questo gruppo di particelle si ottiene una gaussiana con media pari alla massa delle $K^*$ e deviazione standard pari alla larghezza di risonanza. In tab.~\ref{tab:fitgaus} è riportato l'esito del fit.
 
 Per migliorare la precisione della misura si è riutilizzato il metodo appena descritto restringendolo ai soli pioni e kaoni, dato che i decadimenti non producono protoni. In tab.~\ref*{tab:fitgaus} sono riportati l'esito del fit e un fit gaussiano di controllo eseguito sulla massa invariante tra le coppie $\pi K$ prodotte dai decadimenti. In fig.~\ref*{fig:InvMass} sono riportati i tre istogrammi della massa invariante coi rispettivi fit.
 
-Gli esiti di tutti e tre i metodi di calcolo restituiscono $\chi^2$ accettabili e sono compatibili con i valori attesi di media (0.89166~GeV/c$^2$) e deviazione standard (0.050~GeV/c$^2$), ad eccezione della $\sigma$ della massa invariante calcolata tra i prodotti dei decadimenti delle $K^*$, per cui la discrepanza è significativa ($p = 0.037$). Anche ripetendo la generazione non si è riuscito ad eliminare la discrepanza. È infine rilevante notare come restringendo il calcolo ai soli pioni e kaoni l'errore si riduca di un fattore 2.
+Gli esiti di tutti e tre i metodi di calcolo restituiscono $\chi^2$ accettabili e sono compatibili con i valori attesi di media (0.89166~GeV/c$^2$) e deviazione standard (0.050~GeV/c$^2$).
+% , ad eccezione della $\sigma$ della massa invariante calcolata tra i prodotti dei decadimenti delle $K^*$, per cui la discrepanza è significativa ($p = 0.037$). Anche ripetendo la generazione non si è riuscito ad eliminare la discrepanza.
+È infine rilevante notare come restringendo il calcolo ai soli pioni e kaoni l'errore si riduca sensibilmente.
 
 \begin{table}
   \caption{Abbondanza attesa e osservata delle particelle generate divise per tipo}
@@ -106,13 +108,13 @@ Gli esiti di tutti e tre i metodi di calcolo restituiscono $\chi^2$ accettabili 
     \toprule
     Specie  & Occorrenze osservate $(10^5)$ & Occorrenze attese $(10^5)$ \\
     \midrule
-    $\pi^+$ & 40.03 $\pm$ 0.02              & 40                         \\
-    $\pi^-$ & 39.98 $\pm$ 0.02              & 40                         \\
-    $K^+$   & 5.010 $\pm$ 0.007             & 5.0                        \\
+    $\pi^+$ & 40.01 $\pm$ 0.02              & 40                         \\
+    $\pi^-$ & 40.00 $\pm$ 0.02              & 40                         \\
+    $K^+$   & 4.995 $\pm$ 0.007             & 5.0                        \\
     $K^-$   & 4.996 $\pm$ 0.007             & 5.0                        \\
-    $p^+$   & 4.490 $\pm$ 0.007             & 4.5                        \\
-    $p^-$   & 4.490 $\pm$ 0.007             & 4.5                        \\
-    $K^*$   & 1.005 $\pm$ 0.003             & 1.0                        \\
+    $p^+$   & 4.493 $\pm$ 0.007             & 4.5                        \\
+    $p^-$   & 4.495 $\pm$ 0.007             & 4.5                        \\
+    $K^*$   & 1.007 $\pm$ 0.003             & 1.0                        \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -126,10 +128,10 @@ Gli esiti di tutti e tre i metodi di calcolo restituiscono $\chi^2$ accettabili 
     \toprule
     Variabile        & Distribuzione & Parametro del fit                     & $\chi^2$ & DOF & $\chi^2$/DOF \\
     \midrule
-    Modulo           & expo          & (1.0000 $\pm$ 0.0003) GeV             & 14.72    & 18  & 0.82         \\
+    Modulo           & expo          & (1.0001 $\pm$ 0.0003) GeV             & 23.79    & 18  & 1.32         \\
     \midrule
-    Angolo azimutale & pol0          & $(10000 \pm 3) \cdot 10^2$ rad$^{-1}$ & 10.98    & 9   & 1.22         \\
-    Angolo polare    & pol0          & $(10000 \pm 3) \cdot 10^2$ rad$^{-1}$ & 4.86     & 9   & 0.54         \\
+    Angolo azimutale & pol0          & $(10000 \pm 3) \cdot 10^2$ rad$^{-1}$ & 9.50     & 9   & 1.06         \\
+    Angolo polare    & pol0          & $(10000 \pm 3) \cdot 10^2$ rad$^{-1}$ & 14.03    & 9   & 1.56         \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -147,13 +149,13 @@ Gli esiti di tutti e tre i metodi di calcolo restituiscono $\chi^2$ accettabili 
   \centering
   \begin{tabular}{p{4.5cm}cccc}
     \toprule
-    Distribuzione gaussiana                                                                                        & Media (Gev/c$^2$)     & Sigma ($10^{-2}$ GeV/c$^2$) & Ampiezza ($10^4$) & $\chi^2$/DOF \\
+    Distribuzione gaussiana                                                                                        & Media (Gev/c$^2$)     & Sigma (GeV/c$^2$)     & Ampiezza ($10^4$) & $\chi^2$/DOF \\
     \midrule
-    Massa invariante ottenuta dalla differenza delle combinazioni di particelle di carica discorde e concorde      & 0.896 $\pm$ 0.004     & 4.9 $\pm$ 0.4               & 2.22 $\pm$ 0.17   & 0.88         \\
+    Massa invariante ottenuta dalla differenza delle combinazioni di particelle di carica discorde e concorde      & 0.888 $\pm$ 0.005     & 0.054 $\pm$ 0.006     & 3.78 $\pm$ 0.3    & 0.43         \\
     \midrule
-    Massa invariante ottenuta da differenza delle combinazioni di particelle $\pi K$ di carica discorde e concorde & 0.890 $\pm$ 0.002     & 5.00 $\pm$ 0.19             & 1.97 $\pm$ 0.07   & 1.42         \\
+    Massa invariante ottenuta da differenza delle combinazioni di particelle $\pi K$ di carica discorde e concorde & 0.892 $\pm$ 0.002     & 0.049 $\pm$ 0.002     & 1.99 $\pm$ 0.7    & 1.36         \\
     \midrule
-    Massa invariante ottenuta dalle particelle generate dai decadimenti delle $K^*$                                & 0.89189 $\pm$ 0.00016 & 5.024 $\pm$ 0.011           & 1.330 $\pm$ 0.005 & 0.89         \\
+    Massa invariante ottenuta dalle particelle generate dai decadimenti delle $K^*$                                & 0.89146 $\pm$ 0.00016 & 0.05015 $\pm$ 0.00011 & 1.335 $\pm$ 0.005 & 1.57         \\
     \bottomrule
   \end{tabular}
 \end{table*}

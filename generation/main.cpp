@@ -170,7 +170,7 @@ int main() {
   gRandom->SetSeed();
   AddParticleTypes();
 
-  auto listHistos = FillHistos(1e6);
+  auto listHistos = FillHistos(1e5);
 
   auto file = new TFile("Histograms.root", "RECREATE");
   for (auto const histo : *listHistos) {

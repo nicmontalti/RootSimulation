@@ -80,7 +80,7 @@ void analysis(char *filePath) {
     hPulse->Fit("expo", "Q");
     auto fitFunc = hPulse->GetFunction("expo");
     double Chi = fitFunc->GetChisquare();
-    int dof = hPulse->GetNbinsX() - fitFunc->GetNpar();
+    int dof = fitFunc->GetNDF();
 
     std::cout << "PULSE FIT\n"
               << "Tau: " << -fitFunc->GetParameter(1) << " +/- "
@@ -116,7 +116,7 @@ void analysis(char *filePath) {
       h->Fit("pol0", "Q");
       auto fitFunc = h->GetFunction("pol0");
       double Chi = fitFunc->GetChisquare();
-      int dof = h->GetNbinsX() - fitFunc->GetNpar();
+      int dof = fitFunc->GetNDF();
 
       std::cout << h->GetTitle() << " FIT\n"
                 << "Parameter: " << fitFunc->GetParameter(0) << " +/- "
@@ -180,7 +180,7 @@ void analysis(char *filePath) {
       h->Fit("gaus", "Q");
       auto fitFunc = h->GetFunction("gaus");
       double Chi = fitFunc->GetChisquare();
-      int dof = h->GetNbinsX() - fitFunc->GetNpar();
+      int dof = fitFunc->GetNDF();
 
       std::cout << "GAUS FIT " << i << '\n'
                 << "Amplitude : " << fitFunc->GetParameter(0) << " +/- "
