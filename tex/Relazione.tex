@@ -58,7 +58,7 @@ Durante la fase di analisi si verifica che la generazione sia coerente con i par
 \section{Struttura del codice}
 Alla base del programma ci sono tre classi: ParticleType, ResonanceType e Particle. La classe ParticleType (list.~\ref{ParticleType.hpp}-\ref{ParticleType.cpp}) contiene la massa, la carica e il nome di ogni tipo di particella. Dispone inoltre dei rispettivi getters e di un metodo Print che permette di stampare a schermo ogni informazione. La classe ResonanceType (list.~\ref{ResonanceType.hpp}-\ref{ResonanceType.cpp}) eredita da ParticleType e aggiunge la larghezza di risonanza con il rispettivo getter. Sovrascrive inoltre il metodo Print, in modo da stampare anche quest'ultimo attributo. Si è scelto di fare ereditare ResonanceType da ParticleType perché le due classi sono in una relazione di tipo "is-a". Ogni particella di risonanza è anche una particella in senso generale e ne possiede tutti gli attributi (nome, massa e carica).
 
-La classe Particle (list.~\ref{Particle.hpp}-\ref{Particle.cpp}) aggiunge le proprietà cinematiche tipiche di una particella fisica, cioè le tre componenti della quantità di moto. Per integrare le informazioni sulla specie si è invece scelto di non fare ereditare Particle da ParticleType. Se si fosse sfruttata l'ereditarietà, per ogni istanza di Particle sarebbero stati salvati in memoria nome, massa e carica, sprecando risorse. Si è preferito utilizzare l'aggregazione e includere nella classe Particle un array statico di puntatori ParticleType e un indice intero. L'array è riempito tramite il metodo statico AddParticleType all'inizio del programma. Ogni istanza di Particle viene inizializzata con un indice che indica il tipo di particella. Oltre ai canonici getters e setters, Particle dispone di un metodo Decay2Body che permette ai $K^*$ di decadere in un pione e in un kaone di carica opposta.
+La classe Particle (list.~\ref{Particle.hpp}-\ref{Particle.cpp}) aggiunge le proprietà cinematiche tipiche di una particella fisica, cioè le tre componenti della quantità di moto. Per integrare le informazioni sulla specie si è scelto di non fare ereditare Particle da ParticleType. Se si fosse sfruttata l'ereditarietà, per ogni istanza di Particle sarebbero stati salvati in memoria nome, massa e carica, sprecando risorse. Si è preferito utilizzare l'aggregazione e includere nella classe Particle un array statico di puntatori ParticleType e un indice intero. L'array è riempito tramite il metodo statico AddParticleType all'inizio del programma. Ogni istanza di Particle viene inizializzata con un indice che indica il tipo di particella. Oltre ai canonici getters e setters, Particle dispone di un metodo Decay2Body che permette ai $K^*$ di decadere in un pione e in un kaone di carica opposta.
 
 \section{Generazione}
 La generazione avviene nel file main.cpp (list.~\ref{main.cpp}). Inizialmente vengono generati $10^5$ eventi di 100 particelle ciascuno. Ad ogni particella viene assegnata una specie casuale attraverso un blocco if-else if-else secondo le proporzioni definite in tab.~\ref{tab:proporzioni}. La quantità di moto è stabilita estraendone il modulo da una distribuzione esponenziale di media 1 GeV. Gli angoli azimutali e polari si ricavano invece da due distribuzioni uniformi definite sugli intervalli $[0,\pi]$ e $[0,2\pi]$. Le particelle $K^*$ vengono fatte decadere in un $\pi^+$ e un $K^-$ o in $\pi^-$ e un $K^+$ con pari probabilità. Tutte le estrazioni si basano sulle distribuzioni standard di ROOT, richiamate attraverso il puntatore globale gRandom.
@@ -151,9 +151,9 @@ Gli esiti di tutti e tre i metodi di calcolo restituiscono $\chi^2$ accettabili 
     \toprule
     Distribuzione gaussiana                                                                                        & Media (Gev/c$^2$)     & Sigma (GeV/c$^2$)     & Ampiezza ($10^4$) & $\chi^2$/DOF \\
     \midrule
-    Massa invariante ottenuta dalla differenza delle combinazioni di particelle di carica discorde e concorde      & 0.888 $\pm$ 0.005     & 0.054 $\pm$ 0.006     & 3.78 $\pm$ 0.3    & 0.43         \\
+    Massa invariante ottenuta dalla differenza delle combinazioni di particelle di carica discorde e concorde      & 0.888 $\pm$ 0.005     & 0.054 $\pm$ 0.006     & 3.8 $\pm$ 0.3     & 0.43         \\
     \midrule
-    Massa invariante ottenuta da differenza delle combinazioni di particelle $\pi K$ di carica discorde e concorde & 0.892 $\pm$ 0.002     & 0.049 $\pm$ 0.002     & 1.99 $\pm$ 0.7    & 1.36         \\
+    Massa invariante ottenuta da differenza delle combinazioni di particelle $\pi K$ di carica discorde e concorde & 0.892 $\pm$ 0.002     & 0.049 $\pm$ 0.002     & 1.99 $\pm$ 0.07   & 1.36         \\
     \midrule
     Massa invariante ottenuta dalle particelle generate dai decadimenti delle $K^*$                                & 0.89146 $\pm$ 0.00016 & 0.05015 $\pm$ 0.00011 & 1.335 $\pm$ 0.005 & 1.57         \\
     \bottomrule
@@ -169,12 +169,12 @@ Gli esiti di tutti e tre i metodi di calcolo restituiscono $\chi^2$ accettabili 
 
 \newpage
 \lstlistoflistings
-\lstinputlisting[caption=ParticleType.hpp, label=ParticleType.hpp]{generation/ParticleType.hpp}
-\lstinputlisting[caption=ParticleType.cpp, label=ParticleType.cpp]{generation/ParticleType.cpp}
-\lstinputlisting[caption=ResonanceType.hpp, label=ResonanceType.hpp]{generation/ResonanceType.hpp}
-\lstinputlisting[caption=ResonanceType.cpp, label=ResonanceType.cpp]{generation/ResonanceType.cpp}
-\lstinputlisting[caption=Particle.hpp, label=Particle.hpp]{generation/Particle.hpp}
-\lstinputlisting[caption=Particle.cpp, label=Particle.cpp]{generation/Particle.cpp}
+\lstinputlisting[caption=particleType.hpp, label=ParticleType.hpp]{generation/ParticleType.hpp}
+\lstinputlisting[caption=particleType.cpp, label=ParticleType.cpp]{generation/ParticleType.cpp}
+\lstinputlisting[caption=resonanceType.hpp, label=ResonanceType.hpp]{generation/ResonanceType.hpp}
+\lstinputlisting[caption=resonanceType.cpp, label=ResonanceType.cpp]{generation/ResonanceType.cpp}
+\lstinputlisting[caption=particle.hpp, label=Particle.hpp]{generation/Particle.hpp}
+\lstinputlisting[caption=particle.cpp, label=Particle.cpp]{generation/Particle.cpp}
 \lstinputlisting[caption=main.cpp, label=main.cpp]{generation/main.cpp}
 \lstinputlisting[caption=analysis.cpp, label=analysis.cpp]{analysis/analysis.cpp}
 \lstinputlisting[caption=myStyle.hpp, label=myStyle.hpp]{analysis/myStyle.hpp}

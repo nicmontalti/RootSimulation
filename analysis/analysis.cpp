@@ -149,9 +149,9 @@ void analysis(char *filePath) {
         (TH1F *)fileHistograms->Get("hResonanceCoupleInvMass");
     hResonanceCoupleInvMass->Rebin(2);
 
+    hDiscordantPionKaonInvMass->Sumw2();
     auto hDifferencePionKaonInvMass =
         (TH1F *)hDiscordantPionKaonInvMass->Clone("hDifferencePionKaonInvMass");
-    hDifferencePionKaonInvMass->Sumw2();
     hDifferencePionKaonInvMass->Add(hDiscordantPionKaonInvMass,
                                     hConcordantPionKaonInvMass, 1, -1);
     hDifferencePionKaonInvMass->GetXaxis()->SetRangeUser(0.89166 - 0.25,
