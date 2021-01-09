@@ -76,14 +76,20 @@ void analysis(char *filePath) {
   {
     cGeneration->cd(2);
 
+    auto fitFunc =
+        new TF1("fitFuncExpo", "[0] * TMath::Exp(-x / [1])", 0., 10.);
+    fitFunc->SetParameters(1e6, 1);
+    fitFunc->SetParNames("Constant", "Tau");
+    fitFunc->SetLineColor(kBlack);
+    fitFunc->SetLineWidth(2);
+
     auto hPulse = (TH1D *)fileHistograms->Get("hPulse");
-    hPulse->Fit("expo", "Q");
-    auto fitFunc = hPulse->GetFunction("expo");
+    hPulse->Fit("fitFuncExpo", "Q");
     double Chi = fitFunc->GetChisquare();
     int dof = fitFunc->GetNDF();
 
     std::cout << "PULSE FIT\n"
-              << "Tau: " << -fitFunc->GetParameter(1) << " +/- "
+              << "Tau: " << fitFunc->GetParameter(1) << " +/- "
               << fitFunc->GetParError(1) << '\n'
               << "Chi^2: " << Chi << '\n'
               << "dof: " << dof << '\n'
@@ -94,8 +100,6 @@ void analysis(char *filePath) {
     hPulse->GetYaxis()->SetTitle("Occurences");
     hPulse->SetFillColor(42);
     hPulse->SetLineColor(kBlack);
-    fitFunc->SetLineColor(kBlack);
-    fitFunc->SetLineWidth(2);
     hPulse->Draw();
   }
 

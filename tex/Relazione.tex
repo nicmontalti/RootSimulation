@@ -44,16 +44,16 @@ stringstyle=\color{BrickRed},
 keywordstyle=\color{RoyalBlue}
 }
 
-\title{Relazione ROOT}
+\title{Laboratorio di elettromagnetismo e ottica\\Relazione ROOT}
 \author{Nicolò Montalti}
 \date{\today}
 
 \begin{document}
 \maketitle
 \section{Introduzione}
-Il programma si divide in due parti: una di generazione e una di analisi. Nella prima vengono generati $10^5$ gruppi di 100 particelle ciascuno secondo proporzioni predefinite. Le particelle possono essere pioni, kaoni o protoni, tutte di carica positiva o negativa. In aggiunta è possibile produrre kaoni di risonanza, dal cui decadimento si ottengono un pione e un kaone di carica opposta.
+Il programma si divide in due parti: una di generazione e una di analisi. Nella prima vengono generati $10^5$ gruppi di 100 particelle ciascuno, secondo proporzioni predefinite. Le particelle possono essere pioni, kaoni o protoni, tutti di carica positiva o negativa. In aggiunta è possibile produrre kaoni di risonanza, dal cui decadimento si ottengono un pione e un kaone di carica opposta.
 
-Durante la fase di analisi si verifica che la generazione sia coerente con i parametri impostati. Si controllano l'abbondanza dei vari tipi di particelle, la distribuzione del modulo dell'impulso e la sua direzione. Si cerca inoltre di risalire alla massa e alla vita media delle $K^*$ decadute. Ciò avviene analizzando gli istogrammi della massa invariante calcolata tra vari gruppi di particelle. La massa invariante tra i prodotti delle $K^*$ decadute si distribuisce infatti secondo una distribuzione gaussiana la cui media è legata alla massa delle $K^*$ e la deviazione standard all'inverso della vita media.
+Durante la fase di analisi si verifica che la generazione sia coerente con i parametri impostati nella prima fase. Si controllano l'abbondanza dei vari tipi di particella, la distribuzione del modulo dell'impulso e la sua direzione. Si cerca inoltre di risalire alla massa e alla vita media delle $K^*$ decadute. Ciò viene fatto analizzando gli istogrammi della massa invariante calcolata tra vari gruppi di particelle. La massa invariante tra i prodotti delle $K^*$ decadute si distribuisce infatti secondo una distribuzione gaussiana, la cui media è legata alla massa delle $K^*$ e la deviazione standard all'inverso della loro vita media.
 
 \section{Struttura del codice}
 Alla base del programma ci sono tre classi: ParticleType, ResonanceType e Particle. La classe ParticleType (list.~\ref{ParticleType.hpp}-\ref{ParticleType.cpp}) contiene la massa, la carica e il nome di ogni tipo di particella. Dispone inoltre dei rispettivi getters e di un metodo Print che permette di stampare a schermo ogni informazione. La classe ResonanceType (list.~\ref{ResonanceType.hpp}-\ref{ResonanceType.cpp}) eredita da ParticleType e aggiunge la larghezza di risonanza con il rispettivo getter. Sovrascrive inoltre il metodo Print, in modo da stampare anche quest'ultimo attributo. Si è scelto di fare ereditare ResonanceType da ParticleType perché le due classi sono in una relazione di tipo "is-a". Ogni particella di risonanza è anche una particella in senso generale e ne possiede tutti gli attributi (nome, massa e carica).
@@ -92,7 +92,7 @@ Durante la generazione vengono riempiti una serie di istogrammi. Vengono salvati
 \section{Analisi}
 L'analisi è codificata nel file analysis.cpp (list.~\ref{analysis.cpp}). Come si può osservare nella tab.~\ref{tab:abbondanza} e nel primo istogramma in fig.~\ref{fig:Generation}, l'abbondanza delle varie specie è compatibile con i valori attesi. Il modulo dell'impulso si distribuisce secondo una distribuzione esponenziale di media compatibile con il valore atteso 1 GeV e con un $\chi^2$ accettabile. Allo stesso modo gli angoli azimutali e polari dell'impulso sono compatibili con una distribuzione uniforme definita sui rispettivi domini.
 
-Per risalire alle caratteristiche delle $K^*$ decadute si è sfruttato il fatto che ogni decadimento produca un kaone e un pione di carica opposta. L'insieme delle particelle di carica concorde contiene quindi solo particelle che non sono state originate da un decadimento, mentre quello delle particelle di carica opposta contiene le particelle originate dai decadimenti più le altre. Sottraendo il secondo dal primo si elimina gran parte del fondo delle particelle non originate dai decadimenti. Fittando l'istogramma delle masse invarianti tra questo gruppo di particelle si ottiene una gaussiana con media pari alla massa delle $K^*$ e deviazione standard pari alla larghezza di risonanza. In tab.~\ref{tab:fitgaus} è riportato l'esito del fit.
+Per risalire alle caratteristiche delle $K^*$ decadute si è sfruttato il fatto che ogni decadimento produca un kaone e un pione di carica opposta. L'insieme delle particelle di carica concorde contiene quindi solo particelle che non sono state originate da un decadimento, mentre quello delle particelle di carica opposta contiene le particelle originate dai decadimenti più le altre. Sottraendo il secondo dal primo si elimina gran parte del fondo delle particelle non originate dai decadimenti. Fittando l'istogramma risultante si ottiene una gaussiana con media pari alla massa delle $K^*$ e deviazione standard pari alla larghezza di risonanza. In tab.~\ref{tab:fitgaus} è riportato l'esito del fit.
 
 Per migliorare la precisione della misura si è riutilizzato il metodo appena descritto restringendolo ai soli pioni e kaoni, dato che i decadimenti non producono protoni. In tab.~\ref*{tab:fitgaus} sono riportati l'esito del fit e un fit gaussiano di controllo eseguito sulla massa invariante tra le coppie $\pi K$ prodotte dai decadimenti. In fig.~\ref*{fig:InvMass} sono riportati i tre istogrammi della massa invariante coi rispettivi fit.
 
@@ -126,12 +126,12 @@ Gli esiti di tutti e tre i metodi di calcolo restituiscono $\chi^2$ accettabili 
   \centering
   \begin{tabular}{cccccc}
     \toprule
-    Variabile        & Distribuzione & Parametro del fit                     & $\chi^2$ & DOF & $\chi^2$/DOF \\
+    Variabile        & Distribuzione & Parametro del fit                                 & $\chi^2$ & DOF & $\chi^2$/DOF \\
     \midrule
-    Modulo           & expo          & (1.0001 $\pm$ 0.0003) GeV             & 23.79    & 18  & 1.32         \\
+    Modulo           & expo          & $\tau=(0.9999 \pm 0.0003)$ GeV                    & 23.79    & 18  & 1.32         \\
     \midrule
-    Angolo azimutale & pol0          & $(10000 \pm 3) \cdot 10^2$ rad$^{-1}$ & 9.50     & 9   & 1.06         \\
-    Angolo polare    & pol0          & $(10000 \pm 3) \cdot 10^2$ rad$^{-1}$ & 14.03    & 9   & 1.56         \\
+    Angolo azimutale & pol0          & $\text{p0} = (10000 \pm 3) \cdot 10^2$ rad$^{-1}$ & 9.50     & 9   & 1.06         \\
+    Angolo polare    & pol0          & $\text{p0} = (10000 \pm 3) \cdot 10^2$ rad$^{-1}$ & 14.03    & 9   & 1.56         \\
     \bottomrule
   \end{tabular}
 \end{table}
